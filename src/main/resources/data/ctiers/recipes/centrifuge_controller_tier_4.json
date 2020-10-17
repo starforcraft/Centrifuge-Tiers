@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "@S@",
+    "SCS",
+    "@S@"
+  ],
+  "key": {
+    "C": { "item": "ctiers:centrifuge_casing_tier_4" },
+    "S": { "item": "ctiers:centrifuge_controller_tier_3" },
+    "@": { "item": "ctiers:triple_compressed_diamond_block" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_controller_tier_4"
+  }
+}

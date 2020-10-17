@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "@S@",
+    "SCS",
+    "@S@"
+  ],
+  "key": {
+    "C": { "item": "ctiers:centrifuge_casing_tier_creative" },
+    "S": { "item": "ctiers:centrifuge_controller_tier_5" },
+    "@": { "item": "minecraft:purpur_block" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_controller_tier_creative"
+  }
+}

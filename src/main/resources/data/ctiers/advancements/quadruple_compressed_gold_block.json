@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "ctiers:quadruple_compressed_gold_block"
+    },
+    "title": {
+      "translate": "advancements.ctiers.quadruple_compressed_gold_block"
+    },
+    "description": {
+      "translate": "advancements.ctiers.quadruple_compressed_gold_block.description"
+    }
+  },
+  "parent": "ctiers:centrifuge_casing_tier_2",
+  "criteria": {
+    "quadruple_compressed_gold_block_in_inventory": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "ctiers:quadruple_compressed_gold_block"
+          }
+        ]
+      }
+    }
+  }
+}

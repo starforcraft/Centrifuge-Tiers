@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+      "all": "ctiers:block/triple_compressed_cobblestone"
+  }
+}

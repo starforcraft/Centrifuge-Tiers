@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "ctiers:block/centrifuge_controller_tier_5",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ctiers:block/centrifuge_controller_tier_5"
+    },
+    "facing=south": {
+      "model": "ctiers:block/centrifuge_controller_tier_5",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ctiers:block/centrifuge_controller_tier_5",
+      "y": 270
+    }
+  }
+}

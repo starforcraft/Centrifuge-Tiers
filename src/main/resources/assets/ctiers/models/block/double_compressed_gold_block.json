@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+      "all": "ctiers:block/double_compressed_gold_block"
+  }
+}

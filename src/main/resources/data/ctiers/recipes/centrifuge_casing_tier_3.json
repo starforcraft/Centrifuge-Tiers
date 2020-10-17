@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "@S@",
+    "SSS",
+    "@S@"
+  ],
+  "key": {
+    "S": { "item": "ctiers:centrifuge_casing_tier_2" },
+    "@": { "item": "ctiers:quadruple_compressed_gold_block" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_casing_tier_3"
+  }
+}

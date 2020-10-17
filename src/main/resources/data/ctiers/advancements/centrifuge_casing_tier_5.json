@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "ctiers:centrifuge_casing_tier_5"
+    },
+    "title": {
+      "translate": "advancements.ctiers.centrifuge_casing_tier_5"
+    },
+    "description": {
+      "translate": "advancements.ctiers.centrifuge_casing_tier_5.description"
+    }
+  },
+  "parent": "ctiers:quadruple_compressed_emerald_block",
+  "criteria": {
+    "centrifuge_casing_tier_5_in_inventory": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "ctiers:centrifuge_casing_tier_5"
+          }
+        ]
+      }
+    }
+  }
+}

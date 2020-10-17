@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ISD",
+    "SBS",
+    "ESG"
+  ],
+  "key": {
+    "I": { "item": "ctiers:sextuple_compressed_iron_block" },
+    "G": { "item": "ctiers:sextuple_compressed_gold_block" },
+    "D": { "item": "ctiers:sextuple_compressed_diamond_block" },
+    "E": { "item": "ctiers:sextuple_compressed_emerald_block" },
+    "S": { "item": "ctiers:centrifuge_casing_tier_5" },
+    "B": { "item": "minecraft:bedrock" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_casing_tier_creative"
+  }
+}

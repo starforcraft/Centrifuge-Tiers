@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ctiers:ninefold_compressed_cobblestone"
+    }
+  ],
+  "result": {
+    "item": "minecraft:bedrock"
+  }
+}

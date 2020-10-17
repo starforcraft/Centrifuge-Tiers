@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": { "item": "ctiers:sextuple_compressed_cobblestone" }
+  },
+  "result": {
+    "item": "ctiers:septuplicate_compressed_cobblestone"
+  }
+}

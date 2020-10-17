@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": { "item": "ctiers:triple_compressed_emerald_block" }
+  },
+  "result": {
+    "item": "ctiers:quadruple_compressed_emerald_block"
+  }
+}
