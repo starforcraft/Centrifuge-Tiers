@@ -1,14 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "@S@",
+    "@B@",
     "SCS",
-    "@S@"
+    "@R@"
   ],
   "key": {
-    "C": { "item": "ctiers:centrifuge_casing_tier_4" },
-    "S": { "item": "ctiers:centrifuge_controller_tier_3" },
-    "@": { "item": "ctiers:triple_compressed_diamond_block" }
+    "B": { "item": "ctiers:centrifuge_casing_tier_4" },
+    "R": { "item": "minecraft:ender_pearl" },
+    "S": { "item": "minecraft:ender_eye" },
+    "@": { "tag": "forge:storage_blocks/diamond" },
+    "C": { "item": "ctiers:centrifuge_controller_tier_3" }
   },
   "result": {
     "item": "ctiers:centrifuge_controller_tier_4"

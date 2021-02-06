@@ -1,19 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "ISD",
-    "SBS",
-    "ESG"
+    "IRI",
+    "R@R",
+    "IRI"
   ],
   "key": {
-    "I": { "item": "ctiers:sextuple_compressed_iron_block" },
-    "G": { "item": "ctiers:sextuple_compressed_gold_block" },
-    "D": { "item": "ctiers:sextuple_compressed_diamond_block" },
-    "E": { "item": "ctiers:sextuple_compressed_emerald_block" },
-    "S": { "item": "ctiers:centrifuge_casing_tier_5" },
-    "B": { "item": "minecraft:bedrock" }
+    "I": { "tag": "forge:end_stones" },
+    "R": { "tag": "forge:dusts/redstone" },
+    "@": { "item": "ctiers:centrifuge_casing_tier_5" }
   },
   "result": {
-    "item": "ctiers:centrifuge_casing_tier_creative"
+    "item": "ctiers:centrifuge_casing_tier_creative",
+    "count": 3
   }
 }

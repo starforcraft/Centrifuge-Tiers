@@ -1,27 +1,35 @@
 package com.YTrollman.CentrifugeTiers.block;
 
-import net.minecraft.block.Block;
+import com.YTrollman.CentrifugeTiers.registry.ModTileEntityTypes;
+import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeCasingTileEntityTier3;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeCasingBlock;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeCasingTileEntityTier3;
-
-public class CentrifugeCasingBlockTier3 extends Block {
-    public CentrifugeCasingBlockTier3(Properties properties) {
-        super(properties);
-    }
+public class CentrifugeCasingBlockTier3 extends CentrifugeCasingBlock {
+    public CentrifugeCasingBlockTier3(Properties properties) { super(properties); }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
+    public boolean hasTileEntity(BlockState state) { return true; }
 
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CentrifugeCasingTileEntityTier3();
+        return new CentrifugeCasingTileEntityTier3(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY_TIER_3.get());
+    }
+
+    @Override
+    protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof CentrifugeCasingTileEntityTier3) {
+            return ((CentrifugeCasingTileEntityTier3) tileEntity).getController();
+        }
+        return null;
     }
 }

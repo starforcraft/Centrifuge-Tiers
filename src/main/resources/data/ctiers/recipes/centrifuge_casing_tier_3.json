@@ -1,15 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "@S@",
-    "SSS",
-    "@S@"
+    "IRI",
+    "R@R",
+    "IRI"
   ],
   "key": {
-    "S": { "item": "ctiers:centrifuge_casing_tier_2" },
-    "@": { "item": "ctiers:quadruple_compressed_gold_block" }
+    "I": { "tag": "forge:ingots/gold" },
+    "R": { "tag": "forge:dusts/redstone" },
+    "@": { "item": "resourcefulbees:elite_centrifuge_casing" }
   },
   "result": {
-    "item": "ctiers:centrifuge_casing_tier_3"
+    "item": "ctiers:centrifuge_casing_tier_3",
+    "count": 3
   }
 }

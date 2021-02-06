@@ -1,48 +1,34 @@
 modLoader="javafml"
-
-loaderVersion="[32,)"
-
-license="All rights reserved"
-
-issueTrackerURL="http://my.issue.tracker/"
-
+loaderVersion="[36,)"
+license="https://www.gnu.org/licenses/gpl-3.0.en.html"
+issueTrackerURL="https://github.com/starforcraft/Centrifuge-Tiers/issues/new/choose"
 [[mods]]
-
 modId="ctiers"
-
 version="${file.jarVersion}"
-
 displayName="Centrifuge Tiers"
-
-updateJSONURL="http://example.com"
-
 displayURL="https://www.curseforge.com/minecraft/mc-mods/centrifuge-tiers"
-
 logoFile="examplemod.png"
-
 credits="Thanks for downloading this mod."
-
 authors="YTrollman"
-
 description="This mod adds tiers to the Centrifuge."
 
 [[dependencies.ctiers]]
     modId="resourcefulbees"
     mandatory=true
-    versionRange="[0.3.91a,)"
+    versionRange="[0.5.9b,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.ctiers]]
     modId="forge"
     mandatory=true
-    versionRange="[32,)"
+    versionRange="[36.0.0,)"
     ordering="NONE"
     side="BOTH"
-    
+
 [[dependencies.ctiers]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.1]"
+    versionRange="[1.16.5,)"
     ordering="NONE"
     side="BOTH"

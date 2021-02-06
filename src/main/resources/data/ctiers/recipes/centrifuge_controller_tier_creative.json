@@ -1,14 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "@S@",
+    "@B@",
     "SCS",
-    "@S@"
+    "@R@"
   ],
   "key": {
-    "C": { "item": "ctiers:centrifuge_casing_tier_creative" },
-    "S": { "item": "ctiers:centrifuge_controller_tier_5" },
-    "@": { "item": "minecraft:purpur_block" }
+    "B": { "item": "ctiers:centrifuge_casing_tier_creative" },
+    "R": { "item": "minecraft:ender_pearl" },
+    "S": { "item": "minecraft:ender_eye" },
+    "@": { "tag": "forge:end_stones" },
+    "C": { "item": "ctiers:centrifuge_controller_tier_5" }
   },
   "result": {
     "item": "ctiers:centrifuge_controller_tier_creative"

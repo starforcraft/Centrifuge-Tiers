@@ -1,15 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "@S@",
-    "SSS",
-    "@S@"
+    "IRI",
+    "R@R",
+    "IRI"
   ],
   "key": {
-    "S": { "item": "ctiers:centrifuge_casing_tier_3" },
-    "@": { "item": "ctiers:quadruple_compressed_diamond_block" }
+    "I": { "tag": "forge:gems/diamond" },
+    "R": { "tag": "forge:dusts/redstone" },
+    "@": { "item": "ctiers:centrifuge_casing_tier_3" }
   },
   "result": {
-    "item": "ctiers:centrifuge_casing_tier_4"
+    "item": "ctiers:centrifuge_casing_tier_4",
+    "count": 3
   }
 }
