@@ -1,12 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "IRI",
+    "IRG",
     "R@R",
-    "IRI"
+    "DRE"
   ],
   "key": {
-    "I": { "tag": "forge:end_stones" },
+    "I": { "item": "ctiers:sextuple_compressed_iron_block" },
+    "G": { "item": "ctiers:sextuple_compressed_gold_block" },
+    "D": { "item": "ctiers:sextuple_compressed_diamond_block" },
+    "E": { "item": "ctiers:sextuple_compressed_emerald_block" },
     "R": { "tag": "forge:dusts/redstone" },
     "@": { "item": "ctiers:centrifuge_casing_tier_5" }
   },

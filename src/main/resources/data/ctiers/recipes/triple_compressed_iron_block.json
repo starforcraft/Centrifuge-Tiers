@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": { "item": "ctiers:double_compressed_iron_block" }
+  },
+  "result": {
+    "item": "ctiers:triple_compressed_iron_block"
+  }
+}

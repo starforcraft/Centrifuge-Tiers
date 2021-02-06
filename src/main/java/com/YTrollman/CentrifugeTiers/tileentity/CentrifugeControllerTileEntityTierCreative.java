@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -17,6 +18,7 @@ import javax.annotation.Nullable;
 import com.YTrollman.CentrifugeTiers.block.CentrifugeCasingBlockTierCreative;
 import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTierCreative;
 import com.YTrollman.CentrifugeTiers.registry.ModContainers;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -24,6 +26,7 @@ import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 
+import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper.buildStructureBounds;
 import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
 
 import java.util.ArrayList;
@@ -859,6 +862,14 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
         };
     }
 
+    @Override
+    protected MutableBoundingBox getBounds() {
+        return buildStructureBounds(this.getPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
+    }
+    
+    @Override
+    protected int numberOfCasingsRequired() { return 26; }
+    
     @Override
     protected Predicate<BlockPos> validBlocks() {
         return blockPos -> {
