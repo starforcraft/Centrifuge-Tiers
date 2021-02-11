@@ -17,7 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class CentrifugeTiers
 {
     public static final String MOD_ID = "ctiers";
-
+    
     public CentrifugeTiers() {
         RegistryHandler.init();
 		

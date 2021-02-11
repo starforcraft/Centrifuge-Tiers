@@ -6,10 +6,10 @@
     "DRE"
   ],
   "key": {
-    "I": { "item": "ctiers:sextuple_compressed_iron_block" },
-    "G": { "item": "ctiers:sextuple_compressed_gold_block" },
-    "D": { "item": "ctiers:sextuple_compressed_diamond_block" },
-    "E": { "item": "ctiers:sextuple_compressed_emerald_block" },
+    "I": { "tag": "ctiers:quadruple_compressed_iron_blocks" },
+    "G": { "tag": "ctiers:quadruple_compressed_gold_blocks" },
+    "D": { "tag": "ctiers:quadruple_compressed_diamond_blocks" },
+    "E": { "tag": "ctiers:quadruple_compressed_emerald_blocks" },
     "R": { "tag": "forge:dusts/redstone" },
     "@": { "item": "ctiers:centrifuge_casing_tier_5" }
   },

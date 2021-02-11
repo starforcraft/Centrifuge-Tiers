@@ -6,7 +6,7 @@
     "IRI"
   ],
   "key": {
-    "I": { "item": "ctiers:quadruple_compressed_emerald_block" },
+    "I": { "tag": "ctiers:quadruple_compressed_emerald_blocks" },
     "R": { "tag": "forge:dusts/redstone" },
     "@": { "item": "ctiers:centrifuge_casing_tier_4" }
   },

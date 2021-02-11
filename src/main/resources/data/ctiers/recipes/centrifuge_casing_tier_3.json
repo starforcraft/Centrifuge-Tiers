@@ -6,7 +6,7 @@
     "IRI"
   ],
   "key": {
-    "I": { "item": "ctiers:quadruple_compressed_gold_block" },
+    "I": { "tag": "ctiers:quadruple_compressed_gold_blocks" },
     "R": { "tag": "forge:dusts/redstone" },
     "@": { "item": "resourcefulbees:elite_centrifuge_casing" }
   },
