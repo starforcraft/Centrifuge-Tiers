@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 
 public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTileEntity {
 	public int ItemMaxStackSize = 512;
-    private final IntArray times = new IntArray(6) {
+    private final IntArray times = new IntArray(7) {
         public int get(int index) {
             switch(index) {
                 case 0:
@@ -48,6 +48,8 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
                     return CentrifugeControllerTileEntityTier4.this.time[4];
                 case 5:
                     return CentrifugeControllerTileEntityTier4.this.time[5];
+                case 6:
+                    return CentrifugeControllerTileEntityTier4.this.time[6];
                 default:
                     return 0;
             }
@@ -72,11 +74,14 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
                     break;
                 case 5:
                     CentrifugeControllerTileEntityTier4.this.time[5] = value;
+                    break;
+                case 6:
+                    CentrifugeControllerTileEntityTier4.this.time[6] = value;
             }
 
         }
 
-        public int size() { return 6; }
+        public int size() { return 7; }
     };
 
     public CentrifugeControllerTileEntityTier4(TileEntityType<?> tileEntityType) { super(tileEntityType); }
@@ -265,7 +270,7 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
     }
     
     @Override
-    public int getNumberOfInputs() { return 6; }
+    public int getNumberOfInputs() { return 7; }
     
     @Override
     public int getMaxTankCapacity() { return 200000; }

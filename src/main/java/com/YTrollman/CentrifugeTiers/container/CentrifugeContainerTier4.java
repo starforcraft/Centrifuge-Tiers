@@ -10,6 +10,7 @@ import com.resourcefulbees.resourcefulbees.container.OutputSlot;
 import com.resourcefulbees.resourcefulbees.container.SlotItemHandlerUnconditioned;
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,7 +29,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public class CentrifugeMultiblockContainerTier4 extends Container {
+public class CentrifugeContainerTier4 extends Container {
 
     protected final CentrifugeControllerTileEntityTier4 centrifugeTileEntity;
     private final PlayerInventory inv;
@@ -45,11 +46,11 @@ public class CentrifugeMultiblockContainerTier4 extends Container {
         public void set(int value) { centrifugeTileEntity.setRequiresRedstone(value == 1); }
     };
 
-    public CentrifugeMultiblockContainerTier4(int id, World world, BlockPos pos, PlayerInventory inv) {
-        this(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_4.get(), id, world, pos, inv, new IntArray(7));
+    public CentrifugeContainerTier4(int id, World world, BlockPos pos, PlayerInventory inv) {
+        this(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_4.get(), id, world, pos, inv, new IntArray(1));
     }
 
-    public CentrifugeMultiblockContainerTier4(ContainerType<?> containerType, int id, World world, BlockPos pos, PlayerInventory inv, IntArray times) {
+    public CentrifugeContainerTier4(ContainerType<?> containerType, int id, World world, BlockPos pos, PlayerInventory inv, IntArray times) {
         super(containerType, id);
         initialize();
         this.inv = inv;
@@ -125,7 +126,7 @@ public class CentrifugeMultiblockContainerTier4 extends Container {
 
     }
 
-    public CentrifugeControllerTileEntityTier4 getCentrifugeTileEntity() { return centrifugeTileEntity; }
+    public CentrifugeControllerTileEntity getCentrifugeTileEntity() { return centrifugeTileEntity; }
 
     protected int getSlotsPerRow() { return numInputs * 2; }
 

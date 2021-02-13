@@ -1,5 +1,6 @@
 package com.YTrollman.CentrifugeTiers.init;
 
+import com.YTrollman.CentrifugeTiers.gui.screen.CentrifugeMultiblockScreenTier4;
 import com.YTrollman.CentrifugeTiers.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.CentrifugeMultiblockScreen;
 
@@ -16,7 +17,7 @@ public class ClientEventHandler {
     private static void doClientStuff(final FMLClientSetupEvent event) 
     {
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_3.get(), CentrifugeMultiblockScreen::new);
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_4.get(), CentrifugeMultiblockScreen::new);
+        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_4.get(), CentrifugeMultiblockScreenTier4::new);
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_5.get(), CentrifugeMultiblockScreen::new);
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_CREATIVE.get(), CentrifugeMultiblockScreen::new);
     }

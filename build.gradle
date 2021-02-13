@@ -55,6 +55,7 @@ minecraft {
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+	    properties 'mixin.env.disableRefMap': 'true'
 
             mods {
                 ctiers {
@@ -69,6 +70,7 @@ minecraft {
 	    
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+	    properties 'mixin.env.disableRefMap': 'true'
 
             mods {
                 ctiers {
@@ -85,6 +87,7 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+	    properties 'mixin.env.disableRefMap': 'true'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'ctiers', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
