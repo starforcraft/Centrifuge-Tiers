@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTier4;
+import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTierCreative;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
@@ -39,13 +39,13 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
 @SuppressWarnings("deprecation")
-public class CentrifugeMultiblockScreenTier4 extends ContainerScreen<CentrifugeMultiblockContainerTier4> {
+public class CentrifugeMultiblockScreenTierCreative extends ContainerScreen<CentrifugeMultiblockContainerTierCreative> {
 
     // drawTexture(matrix, x, y, textureX, textureY, textWidth, textHeight)
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/centrifuge_gui.png");
     private static final ResourceLocation RECIPE_BUTTON_TEXTURE = new ResourceLocation("textures/gui/recipe_button.png");
     protected static final int L_BDR_WD = 7;  //Left border width
-    protected static final int BG_FILL_WD = 4; //Background filler width
+    protected static final int BG_FILL_WD = 4 + 2; //Background filler width
     protected static final int R_BDR_WD = 7; //Right Border Width
     protected static final int TOP_PAD = 7; //Top border padding
     protected static final int SLOT_WD = 18; //Slot width
@@ -65,7 +65,7 @@ public class CentrifugeMultiblockScreenTier4 extends ContainerScreen<CentrifugeM
     private TabToggleImageButton redstoneButton;
     private TabToggleImageButton fluidDispButton;
 
-    public CentrifugeMultiblockScreenTier4(CentrifugeMultiblockContainerTier4 screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
+    public CentrifugeMultiblockScreenTierCreative(CentrifugeMultiblockContainerTierCreative screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
         numInputs = screenContainer.getCentrifugeTileEntity().getNumberOfInputs();
         initializeData();
@@ -78,21 +78,21 @@ public class CentrifugeMultiblockScreenTier4 extends ContainerScreen<CentrifugeM
     @Override
     protected void init() {
         super.init();
-        int buttonX = this.guiLeft + xSize - TAB_BG_WIDTH - 36;
+        int buttonX = this.guiLeft + xSize - TAB_BG_WIDTH - 4;
         int top = this.guiTop + 6;
 
         redstoneButton = this.addButton(new TabToggleImageButton(buttonX, top + 4, SLOT_WD, SLOT_HT, 25, 220, 18, 18,
                 this.container.getRequiresRedstone(), BACKGROUND, new ItemStack(Items.REDSTONE), new ItemStack(Items.REDSTONE), onPress -> this.setRedstoneControl()) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.centrifuge.button.redstone." + stateTriggered);
-                CentrifugeMultiblockScreenTier4.this.renderTooltip(matrix, s, mouseX, mouseY);
+                CentrifugeMultiblockScreenTierCreative.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         });
         fluidDispButton = this.addButton(new TabToggleImageButton(buttonX, top + 24, SLOT_WD, SLOT_HT, 25, 220, 0, 18,
                 this.container.shouldDisplayFluids(), BACKGROUND, new ItemStack(Items.WATER_BUCKET), new ItemStack(Items.HONEYCOMB), onPress -> this.displayFluids()) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.centrifuge.button.fluid_display." + stateTriggered);
-                CentrifugeMultiblockScreenTier4.this.renderTooltip(matrix, s, mouseX, mouseY);
+                CentrifugeMultiblockScreenTierCreative.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         });
         this.addButton(new ImageButton(buttonX - 1, top + 44, 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (button) -> {}));
@@ -130,7 +130,6 @@ public class CentrifugeMultiblockScreenTier4 extends ContainerScreen<CentrifugeM
             } else {
                 drawOutputSlots(matrix, left, top);
             }
-            drawPowerBar(matrix, left, top);
             drawInventorySlots(matrix, left, top);
         }
     }
@@ -145,15 +144,11 @@ public class CentrifugeMultiblockScreenTier4 extends ContainerScreen<CentrifugeM
         //TODO see if the rest of this method can be condensed a bit further
         int x = this.guiLeft + 10;
         int y = this.guiTop + 38;
-        if (MathUtils.inRangeInclusive(mouseX, x, x + 12) && MathUtils.inRangeInclusive(mouseY, y, y + 58)){
-            if (Screen.hasShiftDown() || this.container.getEnergy() < 500) this.renderTooltip(matrix, new StringTextComponent(this.container.getEnergy() + " RF"), mouseX, mouseY);
-            else this.renderTooltip(matrix, new StringTextComponent(ModConstants.DECIMAL_FORMAT.format(this.container.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
-        }
 
         if (this.container.shouldDisplayFluids()) {
             x = this.guiLeft + L_BDR_WD + SLOT_WD;
             y = this.guiTop + TOP_PAD + DBL_SLOT_HT;
-            if (MathUtils.inRangeInclusive(mouseX, x - 17, x - 17 + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y + 65, y + 65 + 54)) {
+            if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
                 renderFluidToolTip(matrix, mouseX, mouseY, this.container.getFluidInTank(CentrifugeTileEntity.BOTTLE_SLOT));
             } else {
                 for (int i = 0; i < numInputs; i++) {
@@ -183,7 +178,7 @@ public class CentrifugeMultiblockScreenTier4 extends ContainerScreen<CentrifugeM
         }
         int x = left + L_BDR_WD + (BG_FILL_WD * bgRpt) + rBdrCor;
         this.drawTexture(matrix, x, top, L_BDR_WD + BG_FILL_WD, 0, R_BDR_WD, ySize);
-        this.drawTexture(matrix, x + L_BDR_WD, top + 5, 0, 188, 25, 68);
+        this.drawTexture(matrix, x + L_BDR_WD - 2, top + 5, 0, 188, 25, 68);
     }
 
     private void drawInputSlots(MatrixStack matrix, int left, int top) {
@@ -208,12 +203,6 @@ public class CentrifugeMultiblockScreenTier4 extends ContainerScreen<CentrifugeM
         }
     }
 
-    private void drawPowerBar(MatrixStack matrix, int left, int top) {
-        this.drawTexture(matrix, left + 9, top + 37, L_BDR_WD + BG_FILL_WD + R_BDR_WD, 0, 14, 60);
-        int scaledRF = 58 * this.container.getEnergy() / this.container.getMaxEnergy();
-        this.drawTexture(matrix, left + 10, top + 38 + (58 - scaledRF), 32, 58 - scaledRF, 12, scaledRF);
-    }
-
     private void drawInventorySlots(MatrixStack matrix, int left, int top) {
         int xStart = left + (int) (screenWidth * 0.5) - 82;
 
@@ -232,7 +221,7 @@ public class CentrifugeMultiblockScreenTier4 extends ContainerScreen<CentrifugeM
         if (client != null) {
             int x = left + L_BDR_WD + SLOT_WD;
             int y = top + TOP_PAD + DBL_SLOT_HT;
-            drawFluid(0, x - 17, y + 65, matrix, client);
+            drawFluid(0, x - 16, y, matrix, client);
 
             for (int i = 0; i < numInputs; i++) {
                 x = left + outputStartX + SLOT_WD + 9 + (i * DBL_SLOT_WD);

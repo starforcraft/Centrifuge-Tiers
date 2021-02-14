@@ -35,7 +35,7 @@ import java.util.function.Predicate;
 
 public class CentrifugeControllerTileEntityTierCreative extends CentrifugeControllerTileEntity {
 	public int ItemMaxStackSize = 16384;
-    private final IntArray times = new IntArray(6) {
+    private final IntArray times = new IntArray(9) {
         public int get(int index) {
             switch(index) {
                 case 0:
@@ -50,6 +50,12 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
                     return CentrifugeControllerTileEntityTierCreative.this.time[4];
                 case 5:
                     return CentrifugeControllerTileEntityTierCreative.this.time[5];
+                case 6:
+                    return CentrifugeControllerTileEntityTierCreative.this.time[6];
+                case 7:
+                    return CentrifugeControllerTileEntityTierCreative.this.time[7];
+                case 8:
+                    return CentrifugeControllerTileEntityTierCreative.this.time[8];
                 default:
                     return 0;
             }
@@ -74,11 +80,20 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
                     break;
                 case 5:
                     CentrifugeControllerTileEntityTierCreative.this.time[5] = value;
+                    break;
+                case 6:
+                    CentrifugeControllerTileEntityTierCreative.this.time[6] = value;
+                    break;
+                case 7:
+                    CentrifugeControllerTileEntityTierCreative.this.time[7] = value;
+                    break;
+                case 8:
+                    CentrifugeControllerTileEntityTierCreative.this.time[8] = value;
             }
 
         }
 
-        public int size() { return 6; }
+        public int size() { return 9; }
     };
 
     public CentrifugeControllerTileEntityTierCreative(TileEntityType<?> tileEntityType) { super(tileEntityType); }
@@ -846,7 +861,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     }
     
     @Override
-    public int getNumberOfInputs() { return 6; }
+    public int getNumberOfInputs() { return 9; }
 
     @Override
     public int getMaxTankCapacity() { return 5000000; }
