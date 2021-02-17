@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.YTrollman.CentrifugeTiers.block.CentrifugeCasingBlockTier5;
+import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTier5;
 import com.YTrollman.CentrifugeTiers.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
@@ -134,27 +135,17 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
                                 if (recipes.get(i).hasFluidOutput) {
                                     chance = recipes.get(i).fluidOutput.get(0).getRight();
                                     if (chance >= nextFloat) {
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
+                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                                            fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
+                                    	}
                                     }
                                     depositStacks.add(ItemStack.EMPTY);
                                 } else {
                                     chance = recipes.get(i).itemOutputs.get(j).getRight();
                                     if (chance >= nextFloat) {
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
+                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                                            depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
+                                    	}
                                     } else {
                                         depositStacks.add(ItemStack.EMPTY);
                                     }
@@ -163,48 +154,26 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
                             case 1:
                                 chance = recipes.get(i).itemOutputs.get(j).getRight();
                                 if (chance >= nextFloat) {
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
+                                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());	
+                                	}
                                 } else {
                                     depositStacks.add(ItemStack.EMPTY);
                                 }
                                 break;
                             case 2:
                                 if (glass_bottle.isEmpty() || glass_bottle.getCount() < recipes.get(i).itemOutputs.get(j).getLeft().getCount()) {
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
+                                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                                        fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
+                                	}
                                     depositStacks.add(ItemStack.EMPTY);
                                 } else {
                                     chance = recipes.get(i).itemOutputs.get(j).getRight();
                                     if (chance >= nextFloat) {
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
+                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                                            glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
+                                            depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
+                                    	}
                                     } else {
                                         depositStacks.add(ItemStack.EMPTY);
                                     }
@@ -224,7 +193,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
     
     protected void processRecipe(int i) {
         if (canProcess(i)) {
-            energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get() * 8);
+            energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get() * CentrifugeConfig.CENTRIFUGE_TIER_5_RF_PER_BLOCK.get());
             ++time[i];
             processCompleted[i] = time[i] >= getRecipeTime(i);
             this.dirty = true;
@@ -305,11 +274,11 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
     public int getMaxTankCapacity() { return 400000; }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * 0.125)) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * CentrifugeConfig.CENTRIFUGE_TIER_5_RECIPE_TIME.get())) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
 
     @Override
     protected CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * 80, 8000, 0) {
+        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * CentrifugeConfig.CENTRIFUGE_TIER_5_RF_CAPACITY.get(), 8000, 0) {
             @Override
             protected void onEnergyChanged() { markDirty(); }
         };
