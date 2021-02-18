@@ -21,6 +21,8 @@ public class CentrifugeConfig {
     public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_3_RF_CAPACITY;
     public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_4_RF_CAPACITY;
     public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_5_RF_CAPACITY;
+    
+    public static ForgeConfigSpec.BooleanValue CENTRIFUGE_TIER_CREATIVE_SIZE;
 
     public static void init(ForgeConfigSpec.Builder client) {
 
@@ -71,5 +73,9 @@ public class CentrifugeConfig {
             CENTRIFUGE_TIER_5_RF_CAPACITY = client
             		.comment("\nCentrifuge Tier 5 RF Capacity Multiplier")
                     .defineInRange("centrifugeTier5CapacityMutliplier", 80, 1, 1500);
+            
+            CENTRIFUGE_TIER_CREATIVE_SIZE = client
+            		.comment("\nCentrifuge Tier Creative 3x3x3 Size \nShould it be 3x3x3?")
+                    .define("centrifugeTierCreativeSize", true);
     }
 }

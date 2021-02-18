@@ -296,11 +296,29 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
 
     @Override
     protected MutableBoundingBox getBounds() {
-        return buildStructureBounds(this.getPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
+    	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
+    	{
+            return buildStructureBounds(this.getPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
+    	}
+    	else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false)
+    	{
+            return buildStructureBounds(this.getPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
+    	}
+		return buildStructureBounds(this.getPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
     }
     
     @Override
-    protected int numberOfCasingsRequired() { return 26; }
+    protected int numberOfCasingsRequired() {
+    	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
+    	{
+        	return 26;	
+    	}
+    	else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false)
+    	{
+        	return 35;
+    	}
+    	return 26; 
+    }
     
     @Override
     protected Predicate<BlockPos> validBlocks() {
