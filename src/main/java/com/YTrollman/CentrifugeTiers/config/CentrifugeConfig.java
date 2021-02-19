@@ -22,6 +22,16 @@ public class CentrifugeConfig {
     public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_4_RF_CAPACITY;
     public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_5_RF_CAPACITY;
     
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_3_MAX_TANK_CAPACITY;
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_4_MAX_TANK_CAPACITY;
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_5_MAX_TANK_CAPACITY;
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_CREATIVE_MAX_TANK_CAPACITY;
+    
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_3_ITEM_MAX_STACK_SIZE;
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_4_ITEM_MAX_STACK_SIZE;
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_5_ITEM_MAX_STACK_SIZE;
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE;
+    
     public static ForgeConfigSpec.BooleanValue CENTRIFUGE_TIER_CREATIVE_SIZE;
 
     public static void init(ForgeConfigSpec.Builder client) {
@@ -73,6 +83,32 @@ public class CentrifugeConfig {
             CENTRIFUGE_TIER_5_RF_CAPACITY = client
             		.comment("\nCentrifuge Tier 5 RF Capacity Multiplier")
                     .defineInRange("centrifugeTier5CapacityMutliplier", 80, 1, 1500);
+            
+            CENTRIFUGE_TIER_3_MAX_TANK_CAPACITY = client
+            		.comment("\nCentrifuge Tier 3 Max Tank Capacity")
+                    .defineInRange("centrifugeTier3MaxTankCapacity", 100000, 1, 10000000);
+            CENTRIFUGE_TIER_4_MAX_TANK_CAPACITY = client
+            		.comment("\nCentrifuge Tier 4 Max Tank Capacity")
+                    .defineInRange("centrifugeTier4MaxTankCapacity", 200000, 1, 10000000);
+            CENTRIFUGE_TIER_5_MAX_TANK_CAPACITY = client
+            		.comment("\nCentrifuge Tier 5 Max Tank Capacity")
+                    .defineInRange("centrifugeTier5MaxTankCapacity", 400000, 1, 10000000);
+            CENTRIFUGE_TIER_CREATIVE_MAX_TANK_CAPACITY = client
+            		.comment("\nCentrifuge Tier Creative Max Tank Capacity")
+                    .defineInRange("centrifugeTierCreativeMaxTankCapacity", 5000000, 1, 10000000);
+            
+            CENTRIFUGE_TIER_3_ITEM_MAX_STACK_SIZE = client
+            		.comment("\nCentrifuge Tier 3 Item Max Stack Size")
+                    .defineInRange("centrifugeTier3ItemMaxStackSize", 256, 1, 1048576);
+            CENTRIFUGE_TIER_4_ITEM_MAX_STACK_SIZE = client
+            		.comment("\nCentrifuge Tier 4 Item Max Stack Size")
+                    .defineInRange("centrifugeTier4ItemMaxStackSize", 512, 1, 1048576);
+            CENTRIFUGE_TIER_5_ITEM_MAX_STACK_SIZE = client
+            		.comment("\nCentrifuge Tier 5 Item Max Stack Size")
+                    .defineInRange("centrifugeTier5ItemMaxStackSize", 1024, 1, 1048576);
+            CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE = client
+            		.comment("\nCentrifuge Tier Creative Item Max Stack Size")
+                    .defineInRange("centrifugeTierCreativeItemMaxStackSize", 16384, 1, 1048576);
             
             CENTRIFUGE_TIER_CREATIVE_SIZE = client
             		.comment("\nCentrifuge Tier Creative 3x3x3 Size \nShould it be 3x3x3?")

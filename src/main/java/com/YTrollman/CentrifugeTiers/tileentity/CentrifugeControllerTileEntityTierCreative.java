@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class CentrifugeControllerTileEntityTierCreative extends CentrifugeControllerTileEntity {
-	public int ItemMaxStackSize = 16384;
+	public int ItemMaxStackSize = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE.get();
     private final IntArray times = new IntArray(9) {
         public int get(int index) {
             switch(index) {
@@ -281,7 +281,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     public int getNumberOfInputs() { return 9; }
 
     @Override
-    public int getMaxTankCapacity() { return 5000000; }
+    public int getMaxTankCapacity() { return CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MAX_TANK_CAPACITY.get(); }
 
     @Override
     public int getRecipeTime(int i) { return CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_RECIPE_TIME.get(); }

@@ -1,5 +1,6 @@
 package com.YTrollman.CentrifugeTiers.block;
 
+import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.registry.ModTileEntityTypes;
 import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeControllerTileEntityTier4;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
@@ -36,6 +37,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CentrifugeControllerBlockTier4 extends CentrifugeControllerBlock {
+	private int number = CentrifugeConfig.CENTRIFUGE_TIER_4_MUTLIPLIER.get();
+	private int number2 = CentrifugeConfig.CENTRIFUGE_TIER_4_ITEM_MAX_STACK_SIZE.get();
+	private int number3 = CentrifugeConfig.CENTRIFUGE_TIER_4_MAX_TANK_CAPACITY.get();
+	private int number4 = CentrifugeConfig.CENTRIFUGE_TIER_4_RF_PER_BLOCK.get();
+	
     public CentrifugeControllerBlockTier4(Properties properties) { super(properties); }
 
     @Override
@@ -57,10 +63,10 @@ public class CentrifugeControllerBlockTier4 extends CentrifugeControllerBlock {
         if (Screen.hasShiftDown()){
             tooltip.addAll(new TooltipBuilder()
                     .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.faster"), TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.multi"), TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.ItemMaxStackSize"), TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.MaxTankCapacity"), TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.rfperblock"), TextFormatting.YELLOW)
+                    .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.multi") + number, TextFormatting.YELLOW)
+                    .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.ItemMaxStackSize") + number2, TextFormatting.YELLOW)
+                    .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.MaxTankCapacity") + number3, TextFormatting.YELLOW)
+                    .addTip(I18n.format("block.ctiers.centrifuge_tier_4.tooltip.rfperblock") + number4 + "x RF", TextFormatting.YELLOW)
                     .build());
         }
         else {
