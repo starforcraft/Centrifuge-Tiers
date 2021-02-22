@@ -48,7 +48,7 @@ public class CentrifugeConfig {
             		.comment("\nCentrifuge Tier 5 output Multiplier")
                     .defineInRange("centrifugeTier5Mutliplier", 8, 1, 150);
             CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER = client
-            		.comment("\nCentrifuge Tier output Multiplier")
+            		.comment("\nCentrifuge Tier Creative output Multiplier")
                     .defineInRange("centrifugeTierCreativeMutliplier", 100, 1, 150);
             
             CENTRIFUGE_TIER_3_RECIPE_TIME = client
