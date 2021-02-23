@@ -45,9 +45,10 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class CentrifugeControllerBlockTierCreative extends Block {
-	private int number = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get();
-	private int number2 = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE.get();
-	private int number3 = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MAX_TANK_CAPACITY.get();
+	private int number = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_RECIPE_TIME.get();
+	private int number2 = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get();
+	private int number3 = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE.get();
+	private int number4 = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MAX_TANK_CAPACITY.get();
 	
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty PROPERTY_VALID = BooleanProperty.create("valid");
@@ -143,10 +144,10 @@ public class CentrifugeControllerBlockTierCreative extends Block {
         }
         else if (Screen.hasShiftDown()){
             tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.faster"), TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.multi") + number, TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.ItemMaxStackSize") + number2, TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.MaxTankCapacity") + number3, TextFormatting.YELLOW)
+                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.faster") + number + I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.faster2"), TextFormatting.YELLOW)
+                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.multi") + number2, TextFormatting.YELLOW)
+                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.ItemMaxStackSize") + number3, TextFormatting.YELLOW)
+                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.MaxTankCapacity") + number4, TextFormatting.YELLOW)
                     .build());
         }
         else {
@@ -155,21 +156,6 @@ public class CentrifugeControllerBlockTierCreative extends Block {
         }
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
-    
-    /*@OnlyIn(Dist.CLIENT)
-    @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
-        if (Screen.hasControlDown()){
-            tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.structure_size"), TextFormatting.AQUA)
-                    .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.requisites"), TextFormatting.AQUA)
-                    .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.capabilities"), TextFormatting.AQUA)
-                    .build());
-        } else {
-            tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.format("resourcefulbees.ctrl_info")));
-        }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-    }*/
 } 
 
 

@@ -61,8 +61,8 @@ public class CentrifugeConfig {
             		.comment("\nCentrifuge Tier 5 Recipe Time \nThe Value Multiplies the Recipe Time")
                     .defineInRange("centrifugeTier5RecipeTime", 0.125, 0.001, 100);
             CENTRIFUGE_TIER_CREATIVE_RECIPE_TIME = client
-            		.comment("\nCentrifuge Tier Recipe Time \nThe Value is the Tick for the Recipe Time")
-                    .defineInRange("centrifugeTierCreativeRecipeTime", 1, 1, 500);
+            		.comment("\nCentrifuge Tier Recipe Time \nThe Value is the Tick for the Recipe Time \nIf you set the Value to 0 the Game will Crash :)")
+                    .defineInRange("centrifugeTierCreativeRecipeTime", -1, -1, 500);
 
             CENTRIFUGE_TIER_3_RF_PER_BLOCK = client
             		.comment("\nCentrifuge Tier 3 RF per Block Multiplier")

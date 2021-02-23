@@ -117,7 +117,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
                 }
             }
             validateTime++;
-            if (validateTime >= 20) {
+            if (validateTime >= 0) {
                 validateStructure(this.world, null);
             }
             if (dirty) {
