@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRI",
+    "R@R",
+    "IRI"
+  ],
+  "key": {
+    "I": { "tag": "ctiers:quadruple_compressed_gold_blocks_2" },
+    "R": { "tag": "forge:dusts/redstone" },
+    "@": { "item": "resourcefulbees:elite_centrifuge_casing" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_casing_tier_3",
+    "count": 3
+  }
+}

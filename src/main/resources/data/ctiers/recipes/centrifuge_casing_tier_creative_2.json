@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRG",
+    "R@R",
+    "DRE"
+  ],
+  "key": {
+    "I": { "tag": "ctiers:quadruple_compressed_iron_blocks_2" },
+    "G": { "tag": "ctiers:quadruple_compressed_gold_blocks_2" },
+    "D": { "tag": "ctiers:quadruple_compressed_diamond_blocks_2" },
+    "E": { "tag": "ctiers:quadruple_compressed_emerald_blocks_2" },
+    "R": { "tag": "forge:dusts/redstone" },
+    "@": { "item": "ctiers:centrifuge_casing_tier_5" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_casing_tier_creative",
+    "count": 3
+  }
+}

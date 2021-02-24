@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "compressium:iron_6"
+  ],
+  "optional": [
+	"ctiers:sextuple_compressed_iron_block"
+  ]
+}

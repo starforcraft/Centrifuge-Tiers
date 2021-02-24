@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "@B@",
+    "SCS",
+    "@R@"
+  ],
+  "key": {
+    "B": { "item": "ctiers:centrifuge_casing_tier_3" },
+    "R": { "item": "minecraft:ender_pearl" },
+    "S": { "item": "minecraft:ender_eye" },
+    "@": { "tag": "ctiers:quadruple_compressed_gold_blocks_2" },
+    "C": { "item": "resourcefulbees:elite_centrifuge_controller" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_controller_tier_3"
+  }
+}

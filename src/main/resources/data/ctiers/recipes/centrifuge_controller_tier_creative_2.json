@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IBG",
+    "SCS",
+    "DRE"
+  ],
+  "key": {
+    "B": { "item": "ctiers:centrifuge_casing_tier_creative" },
+    "R": { "item": "minecraft:ender_pearl" },
+    "S": { "item": "minecraft:ender_eye" },
+    "I": { "tag": "ctiers:sextuple_compressed_iron_blocks_2" },
+    "G": { "tag": "ctiers:sextuple_compressed_gold_blocks_2" },
+    "D": { "tag": "ctiers:sextuple_compressed_diamond_blocks_2" },
+    "E": { "tag": "ctiers:sextuple_compressed_emerald_blocks_2" },
+    "C": { "item": "ctiers:centrifuge_controller_tier_5" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_controller_tier_creative"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "compressium:gold_4"
+  ],
+  "optional": [
+    "ctiers:quadruple_compressed_gold_block"
+  ]
+}

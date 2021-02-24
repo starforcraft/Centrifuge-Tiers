@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+	"compressium:emerald_6"
+  ],
+  "optional": [
+    "ctiers:sextuple_compressed_emerald_block"
+  ]
+}

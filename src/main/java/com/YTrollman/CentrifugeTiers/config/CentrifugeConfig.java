@@ -32,6 +32,8 @@ public class CentrifugeConfig {
     public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_5_ITEM_MAX_STACK_SIZE;
     public static ForgeConfigSpec.IntValue CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE;
     
+    public static ForgeConfigSpec.BooleanValue COMPRESSED_BLOCKS;
+    
     public static ForgeConfigSpec.BooleanValue CENTRIFUGE_TIER_CREATIVE_SIZE;
 
     public static void init(ForgeConfigSpec.Builder client) {
@@ -113,5 +115,9 @@ public class CentrifugeConfig {
             CENTRIFUGE_TIER_CREATIVE_SIZE = client
             		.comment("\nCentrifuge Tier Creative 3x3x3 Size \nShould it be 3x3x3?")
                     .define("centrifugeTierCreativeSize", true);
+            
+            COMPRESSED_BLOCKS = client
+            		.comment("\nDo you want Compressed Blocks from this mod? \nOnly disable if you have Compressium downloaded \nIf not there will be no Crafting Recipes :)")
+                    .define("CompressedBlocks", true);
     }
 }
