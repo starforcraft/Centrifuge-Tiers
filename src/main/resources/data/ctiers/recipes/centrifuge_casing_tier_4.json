@@ -13,5 +13,14 @@
   "result": {
     "item": "ctiers:centrifuge_casing_tier_4",
     "count": 3
-  }
+  },
+    "conditions": [
+   {
+		"type": "forge:not",
+        "value": {
+			"type": "forge:tag_empty",
+            "tag": "ctiers:quadruple_compressed_gold_blocks"
+        }
+    }
+  ]
 }

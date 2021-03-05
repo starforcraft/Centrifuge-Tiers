@@ -14,5 +14,14 @@
   },
   "result": {
     "item": "ctiers:centrifuge_controller_tier_5"
-  }
+  },
+    "conditions": [
+   {
+		"type": "forge:not",
+        "value": {
+			"type": "forge:tag_empty",
+            "tag": "ctiers:quadruple_compressed_gold_blocks"
+        }
+    }
+  ]
 }
