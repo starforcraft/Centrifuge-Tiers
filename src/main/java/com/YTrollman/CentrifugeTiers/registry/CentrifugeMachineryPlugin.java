@@ -21,9 +21,9 @@ public class CentrifugeMachineryPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CENTRIFUGE_CASING_TIER_3.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CENTRIFUGE_CASING_TIER_4.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CENTRIFUGE_CASING_TIER_5.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CENTRIFUGE_CASING_TIER_CREATIVE.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CENTRIFUGE_CONTROLLER_TIER_3.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CENTRIFUGE_CONTROLLER_TIER_4.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CENTRIFUGE_CONTROLLER_TIER_5.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CENTRIFUGE_CONTROLLER_TIER_CREATIVE.get()), CentrifugeRecipeCategory.ID);
     }
 }

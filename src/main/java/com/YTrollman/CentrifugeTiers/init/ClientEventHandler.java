@@ -18,9 +18,9 @@ public class ClientEventHandler {
 
     private static void doClientStuff(final FMLClientSetupEvent event) 
     {
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_3.get(), CentrifugeMultiblockScreen::new);
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_4.get(), CentrifugeMultiblockScreenTier4::new);
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_5.get(), CentrifugeMultiblockScreenTier5::new);
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_CREATIVE.get(), CentrifugeMultiblockScreenTierCreative::new);
+        ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_3.get(), CentrifugeMultiblockScreen::new);
+        ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_4.get(), CentrifugeMultiblockScreenTier4::new);
+        ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_5.get(), CentrifugeMultiblockScreenTier5::new);
+        ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_CREATIVE.get(), CentrifugeMultiblockScreenTierCreative::new);
     }
 }

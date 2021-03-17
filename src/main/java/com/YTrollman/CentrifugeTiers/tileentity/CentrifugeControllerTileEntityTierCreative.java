@@ -1,16 +1,12 @@
 package com.YTrollman.CentrifugeTiers.tileentity;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraftforge.fluids.FluidStack;
+import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper.buildStructureBounds;
+import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper.buildStructureList;
+import static net.minecraft.inventory.container.Container.consideredTheSameItem;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,14 +21,21 @@ import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 
-import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper.buildStructureBounds;
-import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 public class CentrifugeControllerTileEntityTierCreative extends CentrifugeControllerTileEntity {
 	public int ItemMaxStackSize = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE.get();
@@ -94,35 +97,24 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
 
         }
 
-        public int size() { return 9; }
+        public int getCount() { return 9; }
     };
 
     public CentrifugeControllerTileEntityTierCreative(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote()) {
+        if (level != null && !level.isClientSide()) {
             if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) {
-                for (int i = 0; i < honeycombSlots.length; i++) {
-                    recipes.set(i, getRecipe(i));
-                    if (canStartCentrifugeProcess(i)) {
-                        isProcessing[i] = true;
-                    }
-                    if (isProcessing[i] && !processCompleted[i]) {
-                        processRecipe(i);
-                    }
-                    if (processCompleted[i]) {
-                        processCompleted(i);
-                    }
-                }
+                checkHoneycombSlots();
             }
             validateTime++;
             if (validateTime >= 0) {
-                validateStructure(this.world, null);
+                validateStructure(this.level);
             }
             if (dirty) {
                 this.dirty = false;
-                this.markDirty();
+                this.setChanged();
             }
         }
     }
@@ -133,9 +125,9 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
                 consumeInput(i);
                 ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
                 List<ItemStack> depositStacks = new ArrayList<>();
-                if (world != null) {
+                if (level != null) {
                     for (int j = 0; j < 3; j++) {
-                        float nextFloat = world.rand.nextFloat();
+                        float nextFloat = level.random.nextFloat();
                         float chance;
                         switch (j) {
                             case 0:
@@ -215,14 +207,14 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     protected void depositItemStacks(List<ItemStack> itemStacks) {
         itemStacks.forEach(itemStack -> {
             int slotIndex = outputSlots[0];
-            while (!itemStack.isEmpty() && slotIndex < itemStackHandler.getSlots()){
+            while (!itemStack.isEmpty() && slotIndex < itemStackHandler.getSlots()) {
                 ItemStack slotStack = itemStackHandler.getStackInSlot(slotIndex);
 
                 int itemMaxStackSize = ItemMaxStackSize;
 
-                if(slotStack.isEmpty()) {
+                if (slotStack.isEmpty()) {
                     itemStackHandler.setStackInSlot(slotIndex, itemStack.split(itemMaxStackSize));
-                } else if (areItemsAndTagsEqual(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
+                } else if (consideredTheSameItem(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
                     int combinedCount = itemStack.getCount() + slotStack.getCount();
                     if (combinedCount <= itemMaxStackSize) {
                         itemStack.setCount(0);
@@ -262,7 +254,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
                     if (slotStack.isEmpty() && emptySlots != 0) {
                         count -= Math.min(count, ItemMaxStackSize);
                         emptySlots--;
-                    } else if (areItemsAndTagsEqual(output, slotStack) && slotStack.getCount() != ItemMaxStackSize) {
+                    } else if (consideredTheSameItem(output, slotStack) && slotStack.getCount() != ItemMaxStackSize) {
                         count -= Math.min(count, ItemMaxStackSize - slotStack.getCount());
                     }
 
@@ -290,7 +282,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(1, 0, 0) {
             @Override
-            protected void onEnergyChanged() { markDirty(); }
+            protected void onEnergyChanged() { setChanged(); }
         };
     }
 
@@ -298,34 +290,39 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     protected MutableBoundingBox getBounds() {
     	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
     	{
-            return buildStructureBounds(this.getPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
+            return buildStructureBounds(this.getBlockPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlock.FACING));
     	}
     	else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false)
     	{
-            return buildStructureBounds(this.getPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
+            return buildStructureBounds(this.getBlockPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlock.FACING));
     	}
-		return buildStructureBounds(this.getPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
+		return buildStructureBounds(this.getBlockPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlock.FACING));
     }
     
-    @Override
-    protected int numberOfCasingsRequired() {
+    protected void validateStructure(World world) {
+        validateTime = 0;
+        buildStructureList(getBounds(), structureBlocks, blockPos -> true, this.getBlockPos());
     	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
     	{
-        	return 26;	
+            validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), 26);
     	}
     	else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false)
     	{
-        	return 35;
+            validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), 35);
     	}
-    	return 26; 
+        world.setBlockAndUpdate(worldPosition, getBlockState().setValue(CentrifugeControllerBlock.PROPERTY_VALID, validStructure));
+
+        if (validStructure) {
+            linkCasings(world);
+        }
     }
     
     @Override
     protected Predicate<BlockPos> validBlocks() {
         return blockPos -> {
-            assert world != null : "Validating Centrifuge - How is world null??";
-            Block block = world.getBlockState(blockPos).getBlock();
-            TileEntity tileEntity = world.getTileEntity(blockPos);
+            assert level != null : "Validating Centrifuge - How is world null??";
+            Block block = level.getBlockState(blockPos).getBlock();
+            TileEntity tileEntity = level.getBlockEntity(blockPos);
             if (block instanceof CentrifugeCasingBlockTierCreative && tileEntity instanceof CentrifugeCasingTileEntityTierCreative) {
                 CentrifugeCasingTileEntityTierCreative casing = (CentrifugeCasingTileEntityTierCreative) tileEntity;
                 return !casing.isLinked() || (casing.getController() != null && casing.getController().equals(this));
@@ -337,7 +334,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     @Nullable
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        assert world != null;
-        return new CentrifugeMultiblockContainerTierCreative(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_CREATIVE.get(), id, world, pos, playerInventory, times);
+        assert level != null;
+        return new CentrifugeMultiblockContainerTierCreative(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_CREATIVE.get(), id, level, worldPosition, playerInventory, times);
     }
 }

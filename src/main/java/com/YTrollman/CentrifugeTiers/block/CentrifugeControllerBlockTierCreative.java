@@ -50,16 +50,16 @@ public class CentrifugeControllerBlockTierCreative extends Block {
 	private int number3 = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE.get();
 	private int number4 = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MAX_TANK_CAPACITY.get();
 	
-    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = HorizontalBlock.FACING;
     public static final BooleanProperty PROPERTY_VALID = BooleanProperty.create("valid");
     
     public CentrifugeControllerBlockTierCreative(Properties properties) {
         super(properties);
-        setDefaultState(getDefaultState().with(PROPERTY_VALID,false).with(FACING, Direction.NORTH));
+        registerDefaultState(defaultBlockState().setValue(PROPERTY_VALID,false).setValue(FACING, Direction.NORTH));
     }
 
     protected CentrifugeControllerTileEntityTierCreative getControllerEntity(World world, BlockPos pos) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof CentrifugeControllerTileEntity) {
             return (CentrifugeControllerTileEntityTierCreative) tileEntity;
         }
@@ -68,9 +68,9 @@ public class CentrifugeControllerBlockTierCreative extends Block {
     
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-        if (!world.isRemote) {
-            ItemStack heldItem = player.getHeldItem(hand);
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
+        if (!world.isClientSide) {
+            ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
             CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
@@ -78,7 +78,7 @@ public class CentrifugeControllerBlockTierCreative extends Block {
                 if (usingBucket) {
                     controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                             .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                } else if (!player.isSneaking()) {
+                } else if (!player.isShiftKeyDown()) {
                     NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
                 }
             }
@@ -93,16 +93,16 @@ public class CentrifugeControllerBlockTierCreative extends Block {
     
     @Override
     public void neighborChanged(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof CentrifugeTileEntity) {
             CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity) tileEntity;
-            centrifugeTileEntity.setIsPoweredByRedstone(world.isBlockPowered(pos));
+            centrifugeTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
         }
     }
     
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(@Nonnull BlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos) {
         return getControllerEntity(worldIn, pos);
     }
     
@@ -114,47 +114,47 @@ public class CentrifugeControllerBlockTierCreative extends Block {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new CentrifugeControllerTileEntityTierCreative(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY_TIER_CREATIVE.get()); }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) { return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()); }
+    public BlockState getStateForPlacement(BlockItemUseContext context) { return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) { builder.add(PROPERTY_VALID, FACING); }
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) { builder.add(PROPERTY_VALID, FACING); }
     
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         tooltip.addAll(new TooltipBuilder()
-                .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
+                .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
                 .build());
         if (Screen.hasControlDown()){
     		if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
     		{
                 tooltip.addAll(new TooltipBuilder()
-                        .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.structure_size"), TextFormatting.AQUA)
-                        .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.requisites"), TextFormatting.AQUA)
-                        .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.capabilities"), TextFormatting.AQUA)
+                        .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.structure_size"), TextFormatting.AQUA)
+                        .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.requisites"), TextFormatting.AQUA)
+                        .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.capabilities"), TextFormatting.AQUA)
                         .build());	
     		}
     		else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false) {
                 tooltip.addAll(new TooltipBuilder()
-                        .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.structure_size"), TextFormatting.AQUA)
-                        .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.requisites"), TextFormatting.AQUA)
-                        .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.capabilities"), TextFormatting.AQUA)
+                        .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.structure_size"), TextFormatting.AQUA)
+                        .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.requisites"), TextFormatting.AQUA)
+                        .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.capabilities"), TextFormatting.AQUA)
                         .build());	
     		}
         }
         else if (Screen.hasShiftDown()){
             tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.faster") + number + I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.faster2"), TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.multi") + number2, TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.ItemMaxStackSize") + number3, TextFormatting.YELLOW)
-                    .addTip(I18n.format("block.ctiers.centrifuge_tier_creative.tooltip.MaxTankCapacity") + number4, TextFormatting.YELLOW)
+                    .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.faster") + number + I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.faster2"), TextFormatting.YELLOW)
+                    .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.multi") + number2, TextFormatting.YELLOW)
+                    .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.ItemMaxStackSize") + number3, TextFormatting.YELLOW)
+                    .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.MaxTankCapacity") + number4, TextFormatting.YELLOW)
                     .build());
         }
         else {
-            tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.format("ctiers.left_shift_info")));
-            tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.format("resourcefulbees.ctrl_info")));
+            tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.get("ctiers.left_shift_info")));
+            tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.get("resourcefulbees.ctrl_info")));
         }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 } 
 

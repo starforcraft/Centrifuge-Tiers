@@ -1,15 +1,10 @@
 package com.YTrollman.CentrifugeTiers.tileentity;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidStack;
+import static net.minecraft.inventory.container.Container.consideredTheSameItem;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,11 +21,16 @@ import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 
-import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.FluidStack;
 
 public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTileEntity {
 	public int ItemMaxStackSize = CentrifugeConfig.CENTRIFUGE_TIER_5_ITEM_MAX_STACK_SIZE.get();
@@ -87,35 +87,24 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
 
         }
 
-        public int size() { return 8; }
+        public int getCount() { return 8; }
     };
 
     public CentrifugeControllerTileEntityTier5(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote()) {
+        if (level != null && !level.isClientSide()) {
             if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) {
-                for (int i = 0; i < honeycombSlots.length; i++) {
-                    recipes.set(i, getRecipe(i));
-                    if (canStartCentrifugeProcess(i)) {
-                        isProcessing[i] = true;
-                    }
-                    if (isProcessing[i] && !processCompleted[i]) {
-                        processRecipe(i);
-                    }
-                    if (processCompleted[i]) {
-                        processCompleted(i);
-                    }
-                }
+                checkHoneycombSlots();
             }
             validateTime++;
             if (validateTime >= 20) {
-                validateStructure(this.world, null);
+                validateStructure(this.level);
             }
             if (dirty) {
                 this.dirty = false;
-                this.markDirty();
+                this.setChanged();
             }
         }
     }
@@ -126,9 +115,9 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
                 consumeInput(i);
                 ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
                 List<ItemStack> depositStacks = new ArrayList<>();
-                if (world != null) {
+                if (level != null) {
                     for (int j = 0; j < 3; j++) {
-                        float nextFloat = world.rand.nextFloat();
+                        float nextFloat = level.random.nextFloat();
                         float chance;
                         switch (j) {
                             case 0:
@@ -205,14 +194,14 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
     protected void depositItemStacks(List<ItemStack> itemStacks) {
         itemStacks.forEach(itemStack -> {
             int slotIndex = outputSlots[0];
-            while (!itemStack.isEmpty() && slotIndex < itemStackHandler.getSlots()){
+            while (!itemStack.isEmpty() && slotIndex < itemStackHandler.getSlots()) {
                 ItemStack slotStack = itemStackHandler.getStackInSlot(slotIndex);
 
                 int itemMaxStackSize = ItemMaxStackSize;
 
-                if(slotStack.isEmpty()) {
+                if (slotStack.isEmpty()) {
                     itemStackHandler.setStackInSlot(slotIndex, itemStack.split(itemMaxStackSize));
-                } else if (areItemsAndTagsEqual(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
+                } else if (consideredTheSameItem(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
                     int combinedCount = itemStack.getCount() + slotStack.getCount();
                     if (combinedCount <= itemMaxStackSize) {
                         itemStack.setCount(0);
@@ -252,7 +241,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
                     if (slotStack.isEmpty() && emptySlots != 0) {
                         count -= Math.min(count, ItemMaxStackSize);
                         emptySlots--;
-                    } else if (areItemsAndTagsEqual(output, slotStack) && slotStack.getCount() != ItemMaxStackSize) {
+                    } else if (consideredTheSameItem(output, slotStack) && slotStack.getCount() != ItemMaxStackSize) {
                         count -= Math.min(count, ItemMaxStackSize - slotStack.getCount());
                     }
 
@@ -280,16 +269,16 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * CentrifugeConfig.CENTRIFUGE_TIER_5_RF_CAPACITY.get(), 8000, 0) {
             @Override
-            protected void onEnergyChanged() { markDirty(); }
+            protected void onEnergyChanged() { setChanged(); }
         };
     }
 
     @Override
     protected Predicate<BlockPos> validBlocks() {
         return blockPos -> {
-            assert world != null : "Validating Centrifuge - How is world null??";
-            Block block = world.getBlockState(blockPos).getBlock();
-            TileEntity tileEntity = world.getTileEntity(blockPos);
+            assert level != null : "Validating Centrifuge - How is world null??";
+            Block block = level.getBlockState(blockPos).getBlock();
+            TileEntity tileEntity = level.getBlockEntity(blockPos);
             if (block instanceof CentrifugeCasingBlockTier5 && tileEntity instanceof CentrifugeCasingTileEntityTier5) {
                 CentrifugeCasingTileEntityTier5 casing = (CentrifugeCasingTileEntityTier5) tileEntity;
                 return !casing.isLinked() || (casing.getController() != null && casing.getController().equals(this));
@@ -301,7 +290,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
     @Nullable
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        assert world != null;
-        return new CentrifugeMultiblockContainerTier5(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_5.get(), id, world, pos, playerInventory, times);
+        assert level != null;
+        return new CentrifugeMultiblockContainerTier5(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_5.get(), id, level, worldPosition, playerInventory, times);
     }
 }

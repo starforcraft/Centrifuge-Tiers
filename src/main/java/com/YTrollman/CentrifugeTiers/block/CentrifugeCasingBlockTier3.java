@@ -1,9 +1,14 @@
 package com.YTrollman.CentrifugeTiers.block;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.YTrollman.CentrifugeTiers.registry.ModTileEntityTypes;
 import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeCasingTileEntityTier3;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeCasingBlock;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -20,9 +25,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 public class CentrifugeCasingBlockTier3 extends CentrifugeCasingBlock {
     public CentrifugeCasingBlockTier3(Properties properties) { super(properties); }
 
@@ -37,18 +39,28 @@ public class CentrifugeCasingBlockTier3 extends CentrifugeCasingBlock {
 
     @Override
     protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof CentrifugeCasingTileEntityTier3) {
             return ((CentrifugeCasingTileEntityTier3) tileEntity).getController();
         }
         return null;
     }
     
+    //TODO this can break if other casings are powered need to find an alternative solution.
+    // may have to loop through every casing and check if any are still powered.
+    @Override
+    public void neighborChanged(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
+    	CentrifugeControllerTileEntity centrifugeControllerTileEntity = getControllerEntity(world, pos);
+        if (centrifugeControllerTileEntity != null) {
+            centrifugeControllerTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
+        }
+    }
+    
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-        if (!world.isRemote) {
-            ItemStack heldItem = player.getHeldItem(hand);
+    public ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
+        if (!world.isClientSide) {
+            ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
             CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
@@ -56,8 +68,8 @@ public class CentrifugeCasingBlockTier3 extends CentrifugeCasingBlock {
                     if (usingBucket) {
                         controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                                 .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                    } else if(!player.isSneaking()) {
-                        NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getPos());
+                    } else if(!player.isShiftKeyDown()) {
+                        NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getBlockPos());
                     }
                 }
                 else

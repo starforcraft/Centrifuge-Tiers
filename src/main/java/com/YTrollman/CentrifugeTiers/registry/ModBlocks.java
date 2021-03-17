@@ -22,7 +22,7 @@ public class ModBlocks {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, CentrifugeTiers.MOD_ID);
 
-    private static final AbstractBlock.Properties CENTRIFUGE_PROPERTIES = Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL);
+    private static final AbstractBlock.Properties CENTRIFUGE_PROPERTIES = AbstractBlock.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL);
 
     public static final RegistryObject<Block> CENTRIFUGE_CONTROLLER_TIER_3 = BLOCKS.register("centrifuge_controller_tier_3", () -> new CentrifugeControllerBlockTier3(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> CENTRIFUGE_CASING_TIER_3 = BLOCKS.register("centrifuge_casing_tier_3", () -> new CentrifugeCasingBlockTier3(CENTRIFUGE_PROPERTIES));
