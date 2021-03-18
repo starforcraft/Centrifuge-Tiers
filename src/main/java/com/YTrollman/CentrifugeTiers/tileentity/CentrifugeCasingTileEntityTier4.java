@@ -5,7 +5,7 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.Cen
 import net.minecraft.tileentity.TileEntityType;
 
 public class CentrifugeCasingTileEntityTier4 extends CentrifugeCasingTileEntity {
-
+    
     public CentrifugeCasingTileEntityTier4(TileEntityType<?> tileEntityType) 
     { 
     	super(tileEntityType); 

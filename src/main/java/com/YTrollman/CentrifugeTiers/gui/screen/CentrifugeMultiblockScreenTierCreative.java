@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTierCreative;
+import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeControllerTileEntityTierCreative;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
@@ -17,7 +18,6 @@ import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.DrainCentrifugeTankMessage;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateRedstoneReqMessage;
-import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
@@ -153,7 +153,7 @@ public class CentrifugeMultiblockScreenTierCreative extends ContainerScreen<Cent
             x = this.leftPos + L_BDR_WD + SLOT_WD;
             y = this.topPos + TOP_PAD + DBL_SLOT_HT;
             if (MathUtils.inRangeInclusive(mouseX, x - 16, x - 16 + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
-                renderFluidToolTip(matrix, mouseX, mouseY, this.menu.getFluidInTank(CentrifugeTileEntity.BOTTLE_SLOT));
+                renderFluidToolTip(matrix, mouseX, mouseY, this.menu.getFluidInTank(CentrifugeControllerTileEntityTierCreative.BOTTLE_SLOT));
             } else {
                 for (int i = 0; i < numInputs; i++) {
                     x = this.leftPos + outputStartX + SLOT_WD + 9 + (i * DBL_SLOT_WD);
@@ -262,7 +262,7 @@ public class CentrifugeMultiblockScreenTierCreative extends ContainerScreen<Cent
             int y = this.topPos + TOP_PAD + DBL_SLOT_HT;
 
             if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
-                NetPacketHandler.sendToServer(new DrainCentrifugeTankMessage(this.menu.getCentrifugeTileEntity().getBlockPos(), CentrifugeTileEntity.BOTTLE_SLOT));
+                NetPacketHandler.sendToServer(new DrainCentrifugeTankMessage(this.menu.getCentrifugeTileEntity().getBlockPos(), CentrifugeControllerTileEntityTierCreative.BOTTLE_SLOT));
                 return true;
             } else {
                 for (int i = 0; i < numInputs; i++) {

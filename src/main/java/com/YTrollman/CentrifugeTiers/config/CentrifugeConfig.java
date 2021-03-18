@@ -42,16 +42,16 @@ public class CentrifugeConfig {
             
             CENTRIFUGE_TIER_3_MUTLIPLIER = client
             		.comment("\nCentrifuge Tier 3 output Multiplier")
-                    .defineInRange("centrifugeTier3Mutliplier", 2, 1, 150);
+                    .defineInRange("centrifugeTier3Mutliplier", 2, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_4_MUTLIPLIER = client
             		.comment("\nCentrifuge Tier 4 output Multiplier")
-                    .defineInRange("centrifugeTier4Mutliplier", 4, 1, 150);
+                    .defineInRange("centrifugeTier4Mutliplier", 4, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_5_MUTLIPLIER = client
             		.comment("\nCentrifuge Tier 5 output Multiplier")
-                    .defineInRange("centrifugeTier5Mutliplier", 8, 1, 150);
+                    .defineInRange("centrifugeTier5Mutliplier", 8, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER = client
             		.comment("\nCentrifuge Tier Creative output Multiplier")
-                    .defineInRange("centrifugeTierCreativeMutliplier", 100, 1, 150);
+                    .defineInRange("centrifugeTierCreativeMutliplier", 100, 1, Integer.MAX_VALUE);
             
             CENTRIFUGE_TIER_3_RECIPE_TIME = client
             		.comment("\nCentrifuge Tier 3 Recipe Time \nThe Value Multiplies the Recipe Time")
@@ -68,49 +68,49 @@ public class CentrifugeConfig {
 
             CENTRIFUGE_TIER_3_RF_PER_BLOCK = client
             		.comment("\nCentrifuge Tier 3 RF per Block Multiplier")
-                    .defineInRange("centrifugeTier3RFPerBlockMutliplier", 2, 1, 1000);
+                    .defineInRange("centrifugeTier3RFPerBlockMutliplier", 2, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_4_RF_PER_BLOCK = client
             		.comment("\nCentrifuge Tier 4 RF per Block Multiplier")
-                    .defineInRange("centrifugeTier4RFPerBlockMutliplier", 4, 1, 1000);
+                    .defineInRange("centrifugeTier4RFPerBlockMutliplier", 4, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_5_RF_PER_BLOCK = client
             		.comment("\nCentrifuge Tier 5 RF per Block Multiplier")
-                    .defineInRange("centrifugeTier5RFPerBlockMutliplier", 8, 1, 1000);
+                    .defineInRange("centrifugeTier5RFPerBlockMutliplier", 8, 1, Integer.MAX_VALUE);
             
             CENTRIFUGE_TIER_3_RF_CAPACITY = client
             		.comment("\nCentrifuge Tier 3 RF Capacity Multiplier")
-                    .defineInRange("centrifugeTier3CapacityMutliplier", 20, 1, 1500);
+                    .defineInRange("centrifugeTier3CapacityMutliplier", 20, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_4_RF_CAPACITY = client
             		.comment("\nCentrifuge Tier 4 RF Capacity Multiplier")
-                    .defineInRange("centrifugeTier4CapacityMutliplier", 40, 1, 1500);
+                    .defineInRange("centrifugeTier4CapacityMutliplier", 40, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_5_RF_CAPACITY = client
             		.comment("\nCentrifuge Tier 5 RF Capacity Multiplier")
-                    .defineInRange("centrifugeTier5CapacityMutliplier", 80, 1, 1500);
+                    .defineInRange("centrifugeTier5CapacityMutliplier", 80, 1, Integer.MAX_VALUE);
             
             CENTRIFUGE_TIER_3_MAX_TANK_CAPACITY = client
             		.comment("\nCentrifuge Tier 3 Max Tank Capacity")
-                    .defineInRange("centrifugeTier3MaxTankCapacity", 100000, 1, 10000000);
+                    .defineInRange("centrifugeTier3MaxTankCapacity", 100000, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_4_MAX_TANK_CAPACITY = client
             		.comment("\nCentrifuge Tier 4 Max Tank Capacity")
-                    .defineInRange("centrifugeTier4MaxTankCapacity", 200000, 1, 10000000);
+                    .defineInRange("centrifugeTier4MaxTankCapacity", 200000, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_5_MAX_TANK_CAPACITY = client
             		.comment("\nCentrifuge Tier 5 Max Tank Capacity")
-                    .defineInRange("centrifugeTier5MaxTankCapacity", 400000, 1, 10000000);
+                    .defineInRange("centrifugeTier5MaxTankCapacity", 400000, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_CREATIVE_MAX_TANK_CAPACITY = client
             		.comment("\nCentrifuge Tier Creative Max Tank Capacity")
-                    .defineInRange("centrifugeTierCreativeMaxTankCapacity", 5000000, 1, 10000000);
+                    .defineInRange("centrifugeTierCreativeMaxTankCapacity", 5000000, 1, Integer.MAX_VALUE);
             
             CENTRIFUGE_TIER_3_ITEM_MAX_STACK_SIZE = client
             		.comment("\nCentrifuge Tier 3 Item Max Stack Size")
-                    .defineInRange("centrifugeTier3ItemMaxStackSize", 256, 1, 1048576);
+                    .defineInRange("centrifugeTier3ItemMaxStackSize", 256, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_4_ITEM_MAX_STACK_SIZE = client
             		.comment("\nCentrifuge Tier 4 Item Max Stack Size")
-                    .defineInRange("centrifugeTier4ItemMaxStackSize", 512, 1, 1048576);
+                    .defineInRange("centrifugeTier4ItemMaxStackSize", 512, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_5_ITEM_MAX_STACK_SIZE = client
             		.comment("\nCentrifuge Tier 5 Item Max Stack Size")
-                    .defineInRange("centrifugeTier5ItemMaxStackSize", 1024, 1, 1048576);
+                    .defineInRange("centrifugeTier5ItemMaxStackSize", 1024, 1, Integer.MAX_VALUE);
             CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE = client
             		.comment("\nCentrifuge Tier Creative Item Max Stack Size")
-                    .defineInRange("centrifugeTierCreativeItemMaxStackSize", 16384, 1, 1048576);
+                    .defineInRange("centrifugeTierCreativeItemMaxStackSize", 16384, 1, Integer.MAX_VALUE);
             
             CENTRIFUGE_TIER_CREATIVE_SIZE = client
             		.comment("\nCentrifuge Tier Creative 3x3x3 Size \nShould it be 3x3x3?")

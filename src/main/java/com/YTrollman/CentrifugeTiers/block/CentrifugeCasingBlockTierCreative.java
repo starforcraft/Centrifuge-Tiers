@@ -5,8 +5,8 @@ import javax.annotation.Nullable;
 
 import com.YTrollman.CentrifugeTiers.registry.ModTileEntityTypes;
 import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeCasingTileEntityTierCreative;
+import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeControllerTileEntityTierCreative;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeCasingBlock;
-import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,7 +29,9 @@ public class CentrifugeCasingBlockTierCreative extends CentrifugeCasingBlock {
     public CentrifugeCasingBlockTierCreative(Properties properties) { super(properties); }
 
     @Override
-    public boolean hasTileEntity(BlockState state) { return true; }
+    public boolean hasTileEntity(BlockState state) {
+    	return true;
+    }
 
     @Nullable
     @Override
@@ -38,7 +40,7 @@ public class CentrifugeCasingBlockTierCreative extends CentrifugeCasingBlock {
     }
 
     @Override
-    protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
+    protected CentrifugeControllerTileEntityTierCreative getControllerEntity(World world, BlockPos pos) {
         TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof CentrifugeCasingTileEntityTierCreative) {
             return ((CentrifugeCasingTileEntityTierCreative) tileEntity).getController();
@@ -50,7 +52,7 @@ public class CentrifugeCasingBlockTierCreative extends CentrifugeCasingBlock {
     // may have to loop through every casing and check if any are still powered.
     @Override
     public void neighborChanged(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
-    	CentrifugeControllerTileEntity centrifugeControllerTileEntity = getControllerEntity(world, pos);
+    	CentrifugeControllerTileEntityTierCreative centrifugeControllerTileEntity = getControllerEntity(world, pos);
         if (centrifugeControllerTileEntity != null) {
             centrifugeControllerTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
         }
@@ -62,7 +64,7 @@ public class CentrifugeCasingBlockTierCreative extends CentrifugeCasingBlock {
         if (!world.isClientSide) {
             ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
+            CentrifugeControllerTileEntityTierCreative controller = getControllerEntity(world, pos);
 
                 if (controller != null && controller.isValidStructure()) {
                     if (usingBucket) {

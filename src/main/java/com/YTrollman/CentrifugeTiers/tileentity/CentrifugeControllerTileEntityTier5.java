@@ -9,16 +9,15 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.YTrollman.CentrifugeTiers.block.CentrifugeCasingBlockTier5;
 import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTier5;
 import com.YTrollman.CentrifugeTiers.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
-import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 
 import net.minecraft.block.Block;
@@ -31,6 +30,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTileEntity {
 	public int ItemMaxStackSize = CentrifugeConfig.CENTRIFUGE_TIER_5_ITEM_MAX_STACK_SIZE.get();
@@ -92,6 +92,21 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
 
     public CentrifugeControllerTileEntityTier5(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
+    public void checkHoneycombSlots(){
+        for (int i = 0; i < honeycombSlots.length; i++) {
+            recipes.set(i, getRecipe(i));
+            if (canStartCentrifugeProcess(i)) {
+                isProcessing[i] = true;
+            }
+            if (isProcessing[i] && !processCompleted[i]) {
+                processRecipe(i);
+            }
+            if (processCompleted[i]) {
+            	completeProcess(i);	
+            }
+        }
+    }
+    
     @Override
     public void tick() {
         if (level != null && !level.isClientSide()) {
@@ -99,7 +114,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
                 checkHoneycombSlots();
             }
             validateTime++;
-            if (validateTime >= 20) {
+            if (validateTime >= 5) {
                 validateStructure(this.level);
             }
             if (dirty) {
@@ -109,75 +124,78 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
         }
     }
     
-    protected void processCompleted(int i) {
-        if (recipes.get(i) != null) {
-            if (inventoryHasSpace(recipes.get(i))) {
-                consumeInput(i);
-                ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
-                List<ItemStack> depositStacks = new ArrayList<>();
-                if (level != null) {
-                    for (int j = 0; j < 3; j++) {
-                        float nextFloat = level.random.nextFloat();
-                        float chance;
-                        switch (j) {
-                            case 0:
-                                if (recipes.get(i).hasFluidOutput) {
-                                    chance = recipes.get(i).fluidOutput.get(0).getRight();
-                                    if (chance >= nextFloat) {
-                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
-                                            fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                    	}
-                                    }
-                                    depositStacks.add(ItemStack.EMPTY);
-                                } else {
-                                    chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                    if (chance >= nextFloat) {
-                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
-                                            depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    	}
-                                    } else {
-                                        depositStacks.add(ItemStack.EMPTY);
-                                    }
-                                }
-                                break;
-                            case 1:
-                                chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                if (chance >= nextFloat) {
-                                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());	
-                                	}
-                                } else {
-                                    depositStacks.add(ItemStack.EMPTY);
-                                }
-                                break;
-                            case 2:
-                                if (glass_bottle.isEmpty() || glass_bottle.getCount() < recipes.get(i).itemOutputs.get(j).getLeft().getCount()) {
-                                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
-                                        fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                	}
-                                    depositStacks.add(ItemStack.EMPTY);
-                                } else {
-                                    chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                    if (chance >= nextFloat) {
-                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
-                                            glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                            depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    	}
-                                    } else {
-                                        depositStacks.add(ItemStack.EMPTY);
-                                    }
-                                }
-                        }
-                    }
-                    if (!depositStacks.isEmpty()) {
-                        depositItemStacks(depositStacks);
-                    }
-                }
-                resetProcess(i);
-            }
-        } else {
+    @Override
+    protected void completeProcess(int i) {
+        if (recipes.get(i) == null) {
             resetProcess(i);
+            return;
         }
+        if (!inventoryHasSpace(recipes.get(i))) {
+            return;
+        }
+        if (!tanksHasSpace(recipes.get(i))) {
+            return;
+        }
+        consumeInput(i);
+        ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
+        List<ItemStack> depositStacks = new ArrayList<>();
+        if (level == null) {
+            resetProcess(i);
+            return;
+        }
+        CentrifugeRecipe recipe = recipes.get(i);
+
+        for (int j = 0; j < recipe.itemOutputs.size(); j++) {
+            float chance = recipe.itemOutputs.get(j).getRight();
+            if (chance >= level.random.nextFloat()) {
+            	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                    depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
+            	}
+                if (j == 2 && !recipe.noBottleInput) {
+                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());	
+                	}
+                }
+            }
+        }
+        for (Pair<FluidStack, Float> fluidOutput : recipe.fluidOutput) {
+            float chance = fluidOutput.getRight();
+            if (chance >= level.random.nextFloat()) {
+                FluidStack fluid = fluidOutput.getLeft().copy();
+                int tank = getValidTank(fluid);
+            	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                    fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);	
+            	}
+            }
+        }
+        if (!depositStacks.isEmpty()) {
+            depositItemStacks(depositStacks);
+        }
+        resetProcess(i);
+    }
+    
+    private boolean tanksHasSpace(CentrifugeRecipe centrifugeRecipe) {
+        if (centrifugeRecipe == null) return false;
+        for (Pair<FluidStack, Float> f : centrifugeRecipe.fluidOutput) {
+            if (f.getLeft().isEmpty()) continue;
+            if (getValidTank(f.getKey()) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private int getValidTank(FluidStack fluid) {
+        for (int i = 0; i < fluidTanks.getTanks(); i++) {
+            if (fluidTanks.getFluidInTank(i).getFluid() == fluid.getFluid() || fluidTanks.getFluidInTank(i).isEmpty()) {
+                if (fluidTanks.getFluidInTank(i).getAmount() + fluid.getAmount() <= fluidTanks.getTankCapacity(i)) {
+                    return i;
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return -1;
     }
     
     protected void processRecipe(int i) {

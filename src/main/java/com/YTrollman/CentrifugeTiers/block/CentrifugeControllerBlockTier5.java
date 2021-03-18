@@ -9,9 +9,9 @@ import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.registry.ModTileEntityTypes;
 import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeControllerTileEntityTier5;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
-import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
@@ -45,11 +45,20 @@ public class CentrifugeControllerBlockTier5 extends CentrifugeControllerBlock {
     public CentrifugeControllerBlockTier5(Properties properties) { super(properties); }
 
     @Override
+    protected CentrifugeControllerTileEntityTier5 getControllerEntity(World world, BlockPos pos) {
+        TileEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof CentrifugeControllerTileEntityTier5) {
+            return (CentrifugeControllerTileEntityTier5) tileEntity;
+        }
+        return null;
+    }
+    
+    @Override
     public boolean hasTileEntity(BlockState state)
     {
     	return true;
     }
-
+    
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) 
@@ -81,7 +90,7 @@ public class CentrifugeControllerBlockTier5 extends CentrifugeControllerBlock {
         if (!world.isClientSide) {
             ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
+            CentrifugeControllerTileEntityTier5 controller = getControllerEntity(world, pos);
 
             if (controller != null && controller.isValidStructure()) {
                 if (usingBucket) {
@@ -98,6 +107,15 @@ public class CentrifugeControllerBlockTier5 extends CentrifugeControllerBlock {
         }
 
         return ActionResultType.SUCCESS;
+    }
+    
+    @Override
+    public void neighborChanged(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
+        TileEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof CentrifugeControllerTileEntityTier5) {
+        	CentrifugeControllerTileEntityTier5 centrifugeTileEntity = (CentrifugeControllerTileEntityTier5) tileEntity;
+            centrifugeTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
+        }
     }
 }
 

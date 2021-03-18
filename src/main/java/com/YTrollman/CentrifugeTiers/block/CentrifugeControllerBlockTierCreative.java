@@ -8,8 +8,6 @@ import javax.annotation.Nullable;
 import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.registry.ModTileEntityTypes;
 import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeControllerTileEntityTierCreative;
-import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
-import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 
 import net.minecraft.block.Block;
@@ -60,7 +58,7 @@ public class CentrifugeControllerBlockTierCreative extends Block {
 
     protected CentrifugeControllerTileEntityTierCreative getControllerEntity(World world, BlockPos pos) {
         TileEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof CentrifugeControllerTileEntity) {
+        if (tileEntity instanceof CentrifugeControllerTileEntityTierCreative) {
             return (CentrifugeControllerTileEntityTierCreative) tileEntity;
         }
         return null;
@@ -72,7 +70,7 @@ public class CentrifugeControllerBlockTierCreative extends Block {
         if (!world.isClientSide) {
             ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
+            CentrifugeControllerTileEntityTierCreative controller = getControllerEntity(world, pos);
 
             if (controller != null && controller.isValidStructure()) {
                 if (usingBucket) {
@@ -94,8 +92,8 @@ public class CentrifugeControllerBlockTierCreative extends Block {
     @Override
     public void neighborChanged(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
         TileEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof CentrifugeTileEntity) {
-            CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity) tileEntity;
+        if (tileEntity instanceof CentrifugeControllerTileEntityTierCreative) {
+        	CentrifugeControllerTileEntityTierCreative centrifugeTileEntity = (CentrifugeControllerTileEntityTierCreative) tileEntity;
             centrifugeTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
         }
     }
@@ -111,13 +109,19 @@ public class CentrifugeControllerBlockTierCreative extends Block {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new CentrifugeControllerTileEntityTierCreative(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY_TIER_CREATIVE.get()); }
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) { 
+    	return new CentrifugeControllerTileEntityTierCreative(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY_TIER_CREATIVE.get()); 
+    }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) { return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()); }
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    	return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) { builder.add(PROPERTY_VALID, FACING); }
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    	builder.add(PROPERTY_VALID, FACING);
+    }
     
     @OnlyIn(Dist.CLIENT)
     @Override

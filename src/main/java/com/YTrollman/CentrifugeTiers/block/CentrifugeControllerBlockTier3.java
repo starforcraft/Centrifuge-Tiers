@@ -9,32 +9,20 @@ import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.registry.ModTileEntityTypes;
 import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeControllerTileEntityTier3;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
-import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fml.network.NetworkHooks;
 
 public class CentrifugeControllerBlockTier3 extends CentrifugeControllerBlock {
 	private int number = CentrifugeConfig.CENTRIFUGE_TIER_3_MUTLIPLIER.get();
@@ -43,7 +31,7 @@ public class CentrifugeControllerBlockTier3 extends CentrifugeControllerBlock {
 	private int number4 = CentrifugeConfig.CENTRIFUGE_TIER_3_RF_PER_BLOCK.get();
 	
     public CentrifugeControllerBlockTier3(Properties properties) { super(properties); }
-
+    
     @Override
     public boolean hasTileEntity(BlockState state)
     {
@@ -55,31 +43,6 @@ public class CentrifugeControllerBlockTier3 extends CentrifugeControllerBlock {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) 
     { 
     	return new CentrifugeControllerTileEntityTier3(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY_TIER_3.get()); 
-    }
-    
-    @Nonnull
-    @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-        if (!world.isClientSide) {
-            ItemStack heldItem = player.getItemInHand(hand);
-            boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
-
-            if (controller != null && controller.isValidStructure()) {
-                if (usingBucket) {
-                    controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                } else if (!player.isShiftKeyDown()) {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
-                }
-            }
-            else
-            {
-                return ActionResultType.PASS;
-            }
-        }
-
-        return ActionResultType.SUCCESS;
     }
     
     @OnlyIn(Dist.CLIENT)

@@ -11,16 +11,15 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.YTrollman.CentrifugeTiers.block.CentrifugeCasingBlockTierCreative;
+import com.YTrollman.CentrifugeTiers.block.CentrifugeControllerBlockTierCreative;
 import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTierCreative;
 import com.YTrollman.CentrifugeTiers.registry.ModContainers;
-import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
-import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
-import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 
@@ -36,6 +35,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class CentrifugeControllerTileEntityTierCreative extends CentrifugeControllerTileEntity {
 	public int ItemMaxStackSize = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE.get();
@@ -102,6 +102,21 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
 
     public CentrifugeControllerTileEntityTierCreative(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
+    public void checkHoneycombSlots(){
+        for (int i = 0; i < honeycombSlots.length; i++) {
+            recipes.set(i, getRecipe(i));
+            if (canStartCentrifugeProcess(i)) {
+                isProcessing[i] = true;
+            }
+            if (isProcessing[i] && !processCompleted[i]) {
+                processRecipe(i);
+            }
+            if (processCompleted[i]) {
+            	completeProcess(i);	
+            }
+        }
+    }
+    
     @Override
     public void tick() {
         if (level != null && !level.isClientSide()) {
@@ -119,77 +134,82 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
         }
     }
     
-    protected void processCompleted(int i) {
-        if (recipes.get(i) != null) {
-            if (inventoryHasSpace(recipes.get(i))) {
-                consumeInput(i);
-                ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
-                List<ItemStack> depositStacks = new ArrayList<>();
-                if (level != null) {
-                    for (int j = 0; j < 3; j++) {
-                        float nextFloat = level.random.nextFloat();
-                        float chance;
-                        switch (j) {
-                            case 0:
-                                if (recipes.get(i).hasFluidOutput) {
-                                    chance = recipes.get(i).fluidOutput.get(0).getRight();
-                                    if (chance >= nextFloat) {
-                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                                            fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);	
-                                    	}
-                                    }
-                                    depositStacks.add(ItemStack.EMPTY);
-                                } else {
-                                    chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                    if (chance >= nextFloat) {
-                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                                            depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());	
-                                    	}
-                                    } else {
-                                        depositStacks.add(ItemStack.EMPTY);
-                                    }
-                                }
-                                break;
-                            case 1:
-                                chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                if (chance >= nextFloat) {
-                                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());                                		
-                                	}
-                                } else {
-                                    depositStacks.add(ItemStack.EMPTY);
-                                }
-                                break;
-                            case 2:
-                                if (glass_bottle.isEmpty() || glass_bottle.getCount() < recipes.get(i).itemOutputs.get(j).getLeft().getCount()) {
-                                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                                        fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);                                		
-                                	}
-                                    depositStacks.add(ItemStack.EMPTY);
-                                } else {
-                                    chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                    if (chance >= nextFloat) {
-                                    	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                                            glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                            depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    	}
-                                    } else {
-                                        depositStacks.add(ItemStack.EMPTY);
-                                    }
-                                }
-                        }
-                    }
-                    if (!depositStacks.isEmpty()) {
-                        depositItemStacks(depositStacks);
-                    }
-                }
-                resetProcess(i);
-            }
-        } else {
+    @Override
+    protected void completeProcess(int i) {
+        if (recipes.get(i) == null) {
             resetProcess(i);
+            return;
         }
+        if (!inventoryHasSpace(recipes.get(i))) {
+            return;
+        }
+        if (!tanksHasSpace(recipes.get(i))) {
+            return;
+        }
+        consumeInput(i);
+        ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
+        List<ItemStack> depositStacks = new ArrayList<>();
+        if (level == null) {
+            resetProcess(i);
+            return;
+        }
+        CentrifugeRecipe recipe = recipes.get(i);
+
+        for (int j = 0; j < recipe.itemOutputs.size(); j++) {
+            float chance = recipe.itemOutputs.get(j).getRight();
+            if (chance >= level.random.nextFloat()) {
+            	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
+                    depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
+            	}
+                if (j == 2 && !recipe.noBottleInput) {
+                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
+                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());	
+                	}
+                }
+            }
+        }
+        for (Pair<FluidStack, Float> fluidOutput : recipe.fluidOutput) {
+            float chance = fluidOutput.getRight();
+            if (chance >= level.random.nextFloat()) {
+                FluidStack fluid = fluidOutput.getLeft().copy();
+                int tank = getValidTank(fluid);
+            	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
+                    fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);	
+            	}
+            }
+        }
+        if (!depositStacks.isEmpty()) {
+            depositItemStacks(depositStacks);
+        }
+        resetProcess(i);
     }
     
+
+    private boolean tanksHasSpace(CentrifugeRecipe centrifugeRecipe) {
+        if (centrifugeRecipe == null) return false;
+        for (Pair<FluidStack, Float> f : centrifugeRecipe.fluidOutput) {
+            if (f.getLeft().isEmpty()) continue;
+            if (getValidTank(f.getKey()) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private int getValidTank(FluidStack fluid) {
+        for (int i = 0; i < fluidTanks.getTanks(); i++) {
+            if (fluidTanks.getFluidInTank(i).getFluid() == fluid.getFluid() || fluidTanks.getFluidInTank(i).isEmpty()) {
+                if (fluidTanks.getFluidInTank(i).getAmount() + fluid.getAmount() <= fluidTanks.getTankCapacity(i)) {
+                    return i;
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return -1;
+    }
+    
+    @Override
     protected void processRecipe(int i) {
         if (canProcess(i)) {
             ++time[i];
@@ -200,10 +220,13 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
         }
     }
     
+    @Override
     protected boolean canProcess(int i) { return !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessFluid(i) && canProcessEnergy(); }
     
+    @Override
     protected boolean canProcessEnergy(){ return true; }
     
+    @Override
     protected void depositItemStacks(List<ItemStack> itemStacks) {
         itemStacks.forEach(itemStack -> {
             int slotIndex = outputSlots[0];
@@ -231,6 +254,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
         });
     }
     
+    @Override
     protected boolean inventoryHasSpace(CentrifugeRecipe recipe) {
         int emptySlots = 0;
 
@@ -290,13 +314,13 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     protected MutableBoundingBox getBounds() {
     	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
     	{
-            return buildStructureBounds(this.getBlockPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlock.FACING));
+            return buildStructureBounds(this.getBlockPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlockTierCreative.FACING));
     	}
     	else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false)
     	{
-            return buildStructureBounds(this.getBlockPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlock.FACING));
+            return buildStructureBounds(this.getBlockPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlockTierCreative.FACING));
     	}
-		return buildStructureBounds(this.getBlockPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlock.FACING));
+		return buildStructureBounds(this.getBlockPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlockTierCreative.FACING));
     }
     
     protected void validateStructure(World world) {
@@ -310,10 +334,30 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     	{
             validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), 35);
     	}
-        world.setBlockAndUpdate(worldPosition, getBlockState().setValue(CentrifugeControllerBlock.PROPERTY_VALID, validStructure));
+        world.setBlockAndUpdate(worldPosition, getBlockState().setValue(CentrifugeControllerBlockTierCreative.PROPERTY_VALID, validStructure));
 
         if (validStructure) {
             linkCasings(world);
+        }
+    }
+    
+    @Override
+    protected void linkCasings(World world) {
+        if (!world.isClientSide) {
+            structureBlocks.stream()
+                    .map(world::getBlockEntity)
+                    .filter(CentrifugeCasingTileEntityTierCreative.class::isInstance)
+                    .forEach(tileEntity -> ((CentrifugeCasingTileEntityTierCreative) tileEntity).setControllerPos(this.worldPosition));
+        }
+    }
+
+    @Override
+    protected void unlinkCasings(World world) {
+        if (!world.isClientSide) {
+            structureBlocks.stream()
+                    .map(world::getBlockEntity)
+                    .filter(CentrifugeCasingTileEntityTierCreative.class::isInstance)
+                    .forEach(tileEntity -> ((CentrifugeCasingTileEntityTierCreative) tileEntity).setControllerPos(null));
         }
     }
     

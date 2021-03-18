@@ -9,7 +9,6 @@ import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.registry.ModTileEntityTypes;
 import com.YTrollman.CentrifugeTiers.tileentity.CentrifugeControllerTileEntityTier4;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
-import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 
 import net.minecraft.block.BlockState;
@@ -44,6 +43,15 @@ public class CentrifugeControllerBlockTier4 extends CentrifugeControllerBlock {
 	
     public CentrifugeControllerBlockTier4(Properties properties) { super(properties); }
 
+    @Override
+    protected CentrifugeControllerTileEntityTier4 getControllerEntity(World world, BlockPos pos) {
+        TileEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof CentrifugeControllerTileEntityTier4) {
+            return (CentrifugeControllerTileEntityTier4) tileEntity;
+        }
+        return null;
+    }
+    
     @Override
     public boolean hasTileEntity(BlockState state)
     {
@@ -81,7 +89,7 @@ public class CentrifugeControllerBlockTier4 extends CentrifugeControllerBlock {
         if (!world.isClientSide) {
             ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
+            CentrifugeControllerTileEntityTier4 controller = getControllerEntity(world, pos);
 
             if (controller != null && controller.isValidStructure()) {
                 if (usingBucket) {

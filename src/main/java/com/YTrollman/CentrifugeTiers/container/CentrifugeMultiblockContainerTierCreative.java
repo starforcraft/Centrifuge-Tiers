@@ -9,7 +9,6 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.OutputSlot;
 import com.resourcefulbees.resourcefulbees.container.SlotItemHandlerUnconditioned;
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
-import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -78,7 +77,7 @@ public class CentrifugeMultiblockContainerTierCreative extends Container {
             this.slots.clear();
             numInputs = centrifugeTileEntity.getNumberOfInputs();
 
-            this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.getItemStackHandler(), CentrifugeTileEntity.BOTTLE_SLOT, 26 - 17, 8) {
+            this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.getItemStackHandler(), CentrifugeControllerTileEntityTierCreative.BOTTLE_SLOT, 26 - 17, 8) {
                 public boolean mayPlace(ItemStack stack) { return stack.getItem().equals(Items.GLASS_BOTTLE); }
             });
 
