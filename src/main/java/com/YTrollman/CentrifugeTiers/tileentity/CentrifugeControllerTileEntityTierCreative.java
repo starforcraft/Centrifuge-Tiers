@@ -174,7 +174,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
                 FluidStack fluid = fluidOutput.getLeft().copy();
                 int tank = getValidTank(fluid);
             	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                    fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);	
+            		if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);	
             	}
             }
         }

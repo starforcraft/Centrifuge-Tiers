@@ -159,7 +159,7 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
                 FluidStack fluid = fluidOutput.getLeft().copy();
                 int tank = getValidTank(fluid);
             	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_4_MUTLIPLIER.get(); x++) {
-                    fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);	
+            		if (tank != -1)fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);	
             	}
             }
         }
