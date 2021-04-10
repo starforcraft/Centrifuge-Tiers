@@ -109,5 +109,9 @@ public class CentrifugeConfig {
             CENTRIFUGE_TIER_CREATIVE_ITEM_MAX_STACK_SIZE = client
             		.comment("\nCentrifuge Tier Creative Item Max Stack Size")
                     .defineInRange("centrifugeTierCreativeItemMaxStackSize", 16384, 1, Integer.MAX_VALUE);
+
+            CENTRIFUGE_TIER_CREATIVE_SIZE = client
+                    .comment("\nCentrifuge Tier Creative 3x3x3 Size \nShould it be 3x3x3?")
+                    .define("centrifugeTierCreativeSize", true);
     }
 }
