@@ -6,24 +6,15 @@
     "DRE"
   ],
   "key": {
-    "I": { "tag": "ctiers:quadruple_compressed_iron_blocks" },
-    "G": { "tag": "ctiers:quadruple_compressed_gold_blocks" },
-    "D": { "tag": "ctiers:quadruple_compressed_diamond_blocks" },
-    "E": { "tag": "ctiers:quadruple_compressed_emerald_blocks" },
+    "I": { "item": "compressium:iron_4" },
+    "G": { "item": "compressium:gold_4" },
+    "D": { "item": "compressium:diamond_4" },
+    "E": { "item": "compressium:emerald_4" },
     "R": { "tag": "forge:dusts/redstone" },
     "@": { "item": "ctiers:centrifuge_casing_tier_5" }
   },
   "result": {
     "item": "ctiers:centrifuge_casing_tier_creative",
     "count": 3
-  },
-    "conditions": [
-   {
-		"type": "forge:not",
-        "value": {
-			"type": "forge:tag_empty",
-            "tag": "ctiers:quadruple_compressed_gold_blocks"
-        }
-    }
-  ]
+  }
 }

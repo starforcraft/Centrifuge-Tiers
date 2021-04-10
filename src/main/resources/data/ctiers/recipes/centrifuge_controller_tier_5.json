@@ -9,19 +9,10 @@
     "B": { "item": "ctiers:centrifuge_casing_tier_5" },
     "R": { "item": "minecraft:ender_pearl" },
     "S": { "item": "minecraft:ender_eye" },
-    "@": { "tag": "ctiers:quadruple_compressed_emerald_blocks" },
+    "@": { "item": "compressium:emerald_4" },
     "C": { "item": "ctiers:centrifuge_controller_tier_4" }
   },
   "result": {
     "item": "ctiers:centrifuge_controller_tier_5"
-  },
-    "conditions": [
-   {
-		"type": "forge:not",
-        "value": {
-			"type": "forge:tag_empty",
-            "tag": "ctiers:quadruple_compressed_gold_blocks"
-        }
-    }
-  ]
+  }
 }

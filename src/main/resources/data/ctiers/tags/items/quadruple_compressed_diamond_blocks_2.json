@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "compressium:diamond_4"
-  ],
-  "optional": [
-    "ctiers:quadruple_compressed_diamond_block"
-  ]
-}

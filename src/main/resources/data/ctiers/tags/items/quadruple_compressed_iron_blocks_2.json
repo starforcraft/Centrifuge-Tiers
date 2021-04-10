@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "compressium:iron_4"
-  ],
-  "optional": [
-    "ctiers:quadruple_compressed_iron_block"
-  ]
-}

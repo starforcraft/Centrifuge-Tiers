@@ -13,10 +13,5 @@ public class RegistryHandler {
         ModBlocks.BLOCKS.register(bus);
         ModContainers.CONTAINER_TYPES.register(bus);
         ModTileEntityTypes.TILE_ENTITY_TYPES.register(bus);
-        if (CentrifugeConfig.COMPRESSED_BLOCKS.get() == true)
-        {
-        	ModCompressedBlocks.BLOCKS.register(bus);
-        	ModCompressedItems.ITEMS.register(bus);
-        }
 	}
 }

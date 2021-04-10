@@ -1,6 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-      "all": "ctiers:block/quadruple_compressed_diamond_block"
-  }
-}

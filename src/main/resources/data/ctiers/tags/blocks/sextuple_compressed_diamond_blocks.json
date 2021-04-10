@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "ctiers:sextuple_compressed_diamond_block"
-  ],
-  "optional": [
-    "compressium:diamond_6"
-  ]
-}

@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-	"compressium:gold_6"
-  ],
-  "optional": [
-    "ctiers:sextuple_compressed_gold_block"
-  ]
-}

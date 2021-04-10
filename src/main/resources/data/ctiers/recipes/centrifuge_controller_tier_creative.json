@@ -9,22 +9,13 @@
     "B": { "item": "ctiers:centrifuge_casing_tier_creative" },
     "R": { "item": "minecraft:ender_pearl" },
     "S": { "item": "minecraft:ender_eye" },
-    "I": { "tag": "ctiers:sextuple_compressed_iron_blocks" },
-    "G": { "tag": "ctiers:sextuple_compressed_gold_blocks" },
-    "D": { "tag": "ctiers:sextuple_compressed_diamond_blocks" },
-    "E": { "tag": "ctiers:sextuple_compressed_emerald_blocks" },
+    "I": { "item": "compressium:iron_6" },
+    "G": { "item": "compressium:gold_6" },
+    "D": { "item": "compressium:diamond_6" },
+    "E": { "item": "compressium:emerald_6" },
     "C": { "item": "ctiers:centrifuge_controller_tier_5" }
   },
   "result": {
     "item": "ctiers:centrifuge_controller_tier_creative"
-  },
-    "conditions": [
-   {
-		"type": "forge:not",
-        "value": {
-			"type": "forge:tag_empty",
-            "tag": "ctiers:quadruple_compressed_gold_blocks"
-        }
-    }
-  ]
+  }
 }

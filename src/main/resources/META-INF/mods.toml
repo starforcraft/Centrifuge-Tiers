@@ -13,6 +13,13 @@ authors="YTrollman"
 description="This mod adds tiers to the Centrifuge."
 
 [[dependencies.ctiers]]
+    modId="compressium"
+    mandatory=true
+    versionRange="[1.2.2,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.ctiers]]
     modId="resourcefulbees"
     mandatory=true
     versionRange="[0.6.5b,)"

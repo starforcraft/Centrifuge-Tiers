@@ -26,15 +26,15 @@ public class CentrifugeTiers
     public static final String MOD_ID = "ctiers";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     
-    public CentrifugeTiers() {	
+    public CentrifugeTiers() {
+        RegistryHandler.init();
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.client_config);
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
         Config.loadConfig(Config.client_config, FMLPaths.CONFIGDIR.get().resolve("ctiers-client.toml").toString());
-        
-        RegistryHandler.init();
         
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandler::clientStuff);
         

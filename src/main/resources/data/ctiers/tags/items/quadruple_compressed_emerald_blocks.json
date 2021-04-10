@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "ctiers:quadruple_compressed_emerald_block"
-  ],
-  "optional": [
-    "compressium:emerald_4"
-  ]
-}
