@@ -16,5 +16,11 @@
   "result": {
     "item": "ctiers:centrifuge_casing_tier_creative",
     "count": 3
-  }
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "compressium"
+    }
+  ]
 }

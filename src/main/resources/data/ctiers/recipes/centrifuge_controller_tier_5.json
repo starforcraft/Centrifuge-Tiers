@@ -14,5 +14,11 @@
   },
   "result": {
     "item": "ctiers:centrifuge_controller_tier_5"
-  }
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "compressium"
+    }
+  ]
 }
