@@ -6,13 +6,13 @@
     "IRI"
   ],
   "key": {
-    "I": { "item": "compressium:gold_4" },
+    "I": { "item": "compressium:gold_3" },
     "R": { "tag": "forge:dusts/redstone" },
     "@": { "item": "resourcefulbees:elite_centrifuge_casing" }
   },
   "result": {
     "item": "ctiers:centrifuge_casing_tier_3",
-    "count": 3
+    "count": 1
   },
   "conditions": [
     {

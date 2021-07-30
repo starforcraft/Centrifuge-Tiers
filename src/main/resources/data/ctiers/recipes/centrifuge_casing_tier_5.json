@@ -6,13 +6,13 @@
     "IRI"
   ],
   "key": {
-    "I": { "item": "compressium:emerald_4" },
+    "I": { "item": "compressium:emerald_3" },
     "R": { "tag": "forge:dusts/redstone" },
     "@": { "item": "ctiers:centrifuge_casing_tier_4" }
   },
   "result": {
     "item": "ctiers:centrifuge_casing_tier_5",
-    "count": 3
+    "count": 1
   },
   "conditions": [
     {

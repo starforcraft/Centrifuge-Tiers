@@ -9,10 +9,10 @@
     "B": { "item": "ctiers:centrifuge_casing_tier_creative" },
     "R": { "item": "minecraft:ender_pearl" },
     "S": { "item": "minecraft:ender_eye" },
-    "I": { "item": "compressium:iron_6" },
-    "G": { "item": "compressium:gold_6" },
-    "D": { "item": "compressium:diamond_6" },
-    "E": { "item": "compressium:emerald_6" },
+    "I": { "item": "compressium:iron_5" },
+    "G": { "item": "compressium:gold_5" },
+    "D": { "item": "compressium:diamond_5" },
+    "E": { "item": "compressium:emerald_5" },
     "C": { "item": "ctiers:centrifuge_controller_tier_5" }
   },
   "result": {
