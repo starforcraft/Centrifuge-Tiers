@@ -12,14 +12,14 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber
 public class Config {
 
-	private static final ForgeConfigSpec.Builder client_builder = new ForgeConfigSpec.Builder();
-	public static final ForgeConfigSpec client_config;
+	private static final ForgeConfigSpec.Builder server_builder = new ForgeConfigSpec.Builder();
+	public static final ForgeConfigSpec server_config;
 	
 	
 	static
 	{
-		CentrifugeConfig.init(client_builder);
-		client_config = client_builder.build();
+		CentrifugeConfig.init(server_builder);
+		server_config = server_builder.build();
 	}
 	
 	public static void loadConfig(ForgeConfigSpec config, String path)
