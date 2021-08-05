@@ -1,7 +1,5 @@
 package com.YTrollman.CentrifugeTiers.registry;
 
-import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
-
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 

@@ -29,12 +29,12 @@ public class CentrifugeTiers
     public CentrifugeTiers() {
         RegistryHandler.init();
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.server_config);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.common_config);
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
-        Config.loadConfig(Config.server_config, FMLPaths.CONFIGDIR.get().resolve("ctiers-server.toml").toString());
+        Config.loadConfig(Config.common_config, FMLPaths.CONFIGDIR.get().resolve("ctiers-common.toml").toString());
         
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandler::clientStuff);
         

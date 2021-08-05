@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.item.Item;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.YTrollman.CentrifugeTiers.block.CentrifugeCasingBlockTier5;
@@ -136,6 +137,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
         if (!tanksHasSpace(recipes.get(i))) {
             return;
         }
+        Item CentrifugeInput = this.itemStackHandler.getStackInSlot(this.honeycombSlots[i]).getItem();
         consumeInput(i);
         ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
         List<ItemStack> depositStacks = new ArrayList<>();
@@ -148,13 +150,31 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
         for (int j = 0; j < recipe.itemOutputs.size(); j++) {
             float chance = recipe.itemOutputs.get(j).getRight();
             if (chance >= level.random.nextFloat()) {
-            	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
-                    depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
-            	}
+                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_COMBS_BLACKLIST.get()) {
+                    if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
+                        depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
+                        break;
+                    }
+                    else
+                    {
+                        for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                            depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
+                        }
+                    }
+                }
                 if (j == 2 && !recipe.noBottleInput) {
-                	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
-                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());	
-                	}
+                    for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_COMBS_BLACKLIST.get()) {
+                        if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
+                            glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
+                            break;
+                        }
+                        else
+                        {
+                            for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                                glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -163,9 +183,18 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
             if (chance >= level.random.nextFloat()) {
                 FluidStack fluid = fluidOutput.getLeft().copy();
                 int tank = getValidTank(fluid);
-            	for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
-            		if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);	
-            	}
+                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_COMBS_BLACKLIST.get()) {
+                    if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
+                        if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
+                        break;
+                    }
+                    else
+                    {
+                        for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get(); x++) {
+                            if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
+                        }
+                    }
+                }
             }
         }
         if (!depositStacks.isEmpty()) {
