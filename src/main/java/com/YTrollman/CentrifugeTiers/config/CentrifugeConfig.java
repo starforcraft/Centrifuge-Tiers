@@ -37,7 +37,7 @@ public class CentrifugeConfig {
 
     public static ForgeConfigSpec.BooleanValue CENTRIFUGE_TIER_CREATIVE_SIZE;
 
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> CENTRIFUGE_MULTIPLIER_COMBS_BLACKLIST;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> CENTRIFUGE_MULTIPLIER_BLACKLIST;
 
     public static void init(ForgeConfigSpec.Builder common) {
 
@@ -119,10 +119,8 @@ public class CentrifugeConfig {
                     .comment("\nCentrifuge Tier Creative 3x3x3 Size \nShould it be 3x3x3?")
                     .define("centrifugeTierCreativeSize", true);
 
-            CENTRIFUGE_MULTIPLIER_COMBS_BLACKLIST = common
-                    .comment("\nCentrifuge Multiplier Combs Blacklist \nFor example 'minecraft:honeycomb_block' or 'resourcefulbees:catnip_honeycomb_block'")
-                    .define("centrifugeMultiplierCombsBlacklist", Lists.newArrayList(""), o -> o instanceof String);
-
-            common.build();
+            CENTRIFUGE_MULTIPLIER_BLACKLIST = common
+                    .comment("\nCentrifuge Multiplier Blacklist \nFor example 'minecraft:honeycomb_block' or 'resourcefulbees:catnip_honeycomb_block'")
+                    .defineList("centrifugeMultiplierBlacklist", Lists.newArrayList(""), o -> o instanceof String);
     }
 }

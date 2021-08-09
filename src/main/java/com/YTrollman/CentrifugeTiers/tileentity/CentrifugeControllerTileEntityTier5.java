@@ -150,7 +150,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
         for (int j = 0; j < recipe.itemOutputs.size(); j++) {
             float chance = recipe.itemOutputs.get(j).getRight();
             if (chance >= level.random.nextFloat()) {
-                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_COMBS_BLACKLIST.get()) {
+                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
                     if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
                         depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
                         break;
@@ -163,7 +163,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
                     }
                 }
                 if (j == 2 && !recipe.noBottleInput) {
-                    for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_COMBS_BLACKLIST.get()) {
+                    for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
                         if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
                             glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
                             break;
@@ -183,7 +183,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
             if (chance >= level.random.nextFloat()) {
                 FluidStack fluid = fluidOutput.getLeft().copy();
                 int tank = getValidTank(fluid);
-                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_COMBS_BLACKLIST.get()) {
+                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
                     if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
                         if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
                         break;
