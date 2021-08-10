@@ -36,55 +36,22 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTileEntity {
 	public int ItemMaxStackSize = CentrifugeConfig.CENTRIFUGE_TIER_4_ITEM_MAX_STACK_SIZE.get();
     private final IntArray times = new IntArray(7) {
+        @Override
         public int get(int index) {
-            switch(index) {
-                case 0:
-                    return CentrifugeControllerTileEntityTier4.this.time[0];
-                case 1:
-                    return CentrifugeControllerTileEntityTier4.this.time[1];
-                case 2:
-                    return CentrifugeControllerTileEntityTier4.this.time[2];
-                case 3:
-                    return CentrifugeControllerTileEntityTier4.this.time[3];
-                case 4:
-                    return CentrifugeControllerTileEntityTier4.this.time[4];
-                case 5:
-                    return CentrifugeControllerTileEntityTier4.this.time[5];
-                case 6:
-                    return CentrifugeControllerTileEntityTier4.this.time[6];
-                default:
-                    return 0;
-            }
+            if(getCount() - index >= 1) return CentrifugeControllerTileEntityTier4.this.time[index];
+            return 0;
         }
 
+        @Override
         public void set(int index, int value) {
-            switch(index) {
-                case 0:
-                    CentrifugeControllerTileEntityTier4.this.time[0] = value;
-                    break;
-                case 1:
-                    CentrifugeControllerTileEntityTier4.this.time[1] = value;
-                    break;
-                case 2:
-                    CentrifugeControllerTileEntityTier4.this.time[2] = value;
-                    break;
-                case 3:
-                    CentrifugeControllerTileEntityTier4.this.time[3] = value;
-                    break;
-                case 4:
-                    CentrifugeControllerTileEntityTier4.this.time[4] = value;
-                    break;
-                case 5:
-                    CentrifugeControllerTileEntityTier4.this.time[5] = value;
-                    break;
-                case 6:
-                    CentrifugeControllerTileEntityTier4.this.time[6] = value;
-            }
-
+            if(getCount() - index >= 1) CentrifugeControllerTileEntityTier4.this.time[index] = value;
         }
 
+        @Override
         public int getCount() { return 7; }
     };
+    private final List<String> blacklist = (List<String>) CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get();
+    private final int multiplier = CentrifugeConfig.CENTRIFUGE_TIER_4_MUTLIPLIER.get();
 
     public CentrifugeControllerTileEntityTier4(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
@@ -106,13 +73,9 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
     @Override
     public void tick() {
         if (level != null && !level.isClientSide()) {
-            if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) {
-                checkHoneycombSlots();
-            }
+            if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) checkHoneycombSlots();
             validateTime++;
-            if (validateTime >= 10) {
-                validateStructure(this.level);
-            }
+            if (validateTime >= 10) validateStructure(this.level);
             if (dirty) {
                 this.dirty = false;
                 this.setChanged();
@@ -124,99 +87,57 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
     protected void completeProcess(int i) {
         if (recipes.get(i) == null) {
             resetProcess(i);
-            return;
-        }
-        if (!inventoryHasSpace(recipes.get(i))) {
-            return;
-        }
-        if (!tanksHasSpace(recipes.get(i))) {
-            return;
-        }
-        Item CentrifugeInput = this.itemStackHandler.getStackInSlot(this.honeycombSlots[i]).getItem();
-        consumeInput(i);
-        ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
-        List<ItemStack> depositStacks = new ArrayList<>();
-        if (level == null) {
-            resetProcess(i);
-            return;
-        }
-        CentrifugeRecipe recipe = recipes.get(i);
+        } else if(inventoryHasSpace(recipes.get(i)) && tanksHasSpace(recipes.get(i))){
+            ItemStack centrifugeInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
+            consumeInput(i);
+            ItemStack glassBottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
+            List<ItemStack> depositStacks = new ArrayList<>();
+            if (level != null) {
+                CentrifugeRecipe recipe = recipes.get(i);
+                for (int j = 0; j < recipe.itemOutputs.size(); j++) {
+                    float chance = recipe.itemOutputs.get(j).getRight();
+                    if (chance >= level.random.nextFloat()) {
+                        ItemStack output = recipe.itemOutputs.get(j).getLeft().copy();
+                        output.setCount(output.getCount() * (blacklist.contains(centrifugeInput.getItem().getRegistryName().toString()) ? 1 : multiplier));
+                        depositStacks.add(output);
+                        if (j == 2 && !recipe.noBottleInput) {
+                            glassBottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount() * multiplier);
+                        }
+                    }
+                }
 
-        for (int j = 0; j < recipe.itemOutputs.size(); j++) {
-            float chance = recipe.itemOutputs.get(j).getRight();
-            if (chance >= level.random.nextFloat()) {
-                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
-                    if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
-                        depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
-                        break;
-                    }
-                    else
-                    {
-                        for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_4_MUTLIPLIER.get(); x++) {
-                            depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
+                for (Pair<FluidStack, Float> fluidStackFloatPair : recipe.fluidOutput) {
+                    float chance = fluidStackFloatPair.getRight();
+                    if (chance >= this.level.random.nextFloat()) {
+                        FluidStack fluid = fluidStackFloatPair.getLeft().copy();
+                        int tank = this.getValidTank(fluid);
+                        if(fluid.getAmount() != 0) fluid.setAmount(fluid.getAmount() * (blacklist.contains(centrifugeInput.getItem().getRegistryName().toString()) ? 1 : multiplier));
+                        if (tank != -1) {
+                            this.fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
                         }
                     }
                 }
-                if (j == 2 && !recipe.noBottleInput) {
-                    for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
-                        if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
-                            glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
-                            break;
-                        }
-                        else
-                        {
-                            for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_4_MUTLIPLIER.get(); x++) {
-                                glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
-                            }
-                        }
-                    }
+                if (!depositStacks.isEmpty()) {
+                    depositItemStacks(depositStacks);
                 }
             }
+            resetProcess(i);
         }
-        for (Pair<FluidStack, Float> fluidOutput : recipe.fluidOutput) {
-            float chance = fluidOutput.getRight();
-            if (chance >= level.random.nextFloat()) {
-                FluidStack fluid = fluidOutput.getLeft().copy();
-                int tank = getValidTank(fluid);
-                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
-                    if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
-                        if (tank != -1)fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
-                        break;
-                    }
-                    else
-                    {
-                        for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_4_MUTLIPLIER.get(); x++) {
-                            if (tank != -1)fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
-                        }
-                    }
-                }
-            }
-        }
-        if (!depositStacks.isEmpty()) {
-            depositItemStacks(depositStacks);
-        }
-        resetProcess(i);
     }
     
     private boolean tanksHasSpace(CentrifugeRecipe centrifugeRecipe) {
         if (centrifugeRecipe == null) return false;
         for (Pair<FluidStack, Float> f : centrifugeRecipe.fluidOutput) {
             if (f.getLeft().isEmpty()) continue;
-            if (getValidTank(f.getKey()) < 0) {
-                return false;
-            }
+            return getValidTank(f.getKey()) >= 0;
         }
         return true;
     }
-    
+
     private int getValidTank(FluidStack fluid) {
         for (int i = 0; i < fluidTanks.getTanks(); i++) {
             if (fluidTanks.getFluidInTank(i).getFluid() == fluid.getFluid() || fluidTanks.getFluidInTank(i).isEmpty()) {
-                if (fluidTanks.getFluidInTank(i).getAmount() + fluid.getAmount() <= fluidTanks.getTankCapacity(i)) {
-                    return i;
-                } else {
-                    return -1;
-                }
+                return (fluidTanks.getFluidInTank(i).getAmount() + fluid.getAmount() <= fluidTanks.getTankCapacity(i)) ? i : -1;
             }
         }
         return -1;
@@ -228,9 +149,7 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
             ++time[i];
             processCompleted[i] = time[i] >= getRecipeTime(i);
             this.dirty = true;
-        } else {
-            resetProcess(i);
-        }
+        } else resetProcess(i);
     }
     
     protected void depositItemStacks(List<ItemStack> itemStacks) {

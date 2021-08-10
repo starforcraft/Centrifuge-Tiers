@@ -11,9 +11,6 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.YTrollman.CentrifugeTiers.CentrifugeTiers;
-import me.dinnerbeef.compressium.blocks.Honey;
-import net.minecraft.item.Item;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.YTrollman.CentrifugeTiers.block.CentrifugeCasingBlockTierCreative;
@@ -45,66 +42,20 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     private final IntArray times = new IntArray(9) {
         @Override
         public int get(int index) {
-            switch(index) {
-                case 0:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[0];
-                case 1:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[1];
-                case 2:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[2];
-                case 3:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[3];
-                case 4:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[4];
-                case 5:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[5];
-                case 6:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[6];
-                case 7:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[7];
-                case 8:
-                    return CentrifugeControllerTileEntityTierCreative.this.time[8];
-                default:
-                    return 0;
-            }
+            if(getCount() - index >= 1) return CentrifugeControllerTileEntityTierCreative.this.time[index];
+            return 0;
         }
 
         @Override
         public void set(int index, int value) {
-            switch(index) {
-                case 0:
-                    CentrifugeControllerTileEntityTierCreative.this.time[0] = value;
-                    break;
-                case 1:
-                    CentrifugeControllerTileEntityTierCreative.this.time[1] = value;
-                    break;
-                case 2:
-                    CentrifugeControllerTileEntityTierCreative.this.time[2] = value;
-                    break;
-                case 3:
-                    CentrifugeControllerTileEntityTierCreative.this.time[3] = value;
-                    break;
-                case 4:
-                    CentrifugeControllerTileEntityTierCreative.this.time[4] = value;
-                    break;
-                case 5:
-                    CentrifugeControllerTileEntityTierCreative.this.time[5] = value;
-                    break;
-                case 6:
-                    CentrifugeControllerTileEntityTierCreative.this.time[6] = value;
-                    break;
-                case 7:
-                    CentrifugeControllerTileEntityTierCreative.this.time[7] = value;
-                    break;
-                case 8:
-                    CentrifugeControllerTileEntityTierCreative.this.time[8] = value;
-                    break;
-            }
+            if(getCount() - index >= 1) CentrifugeControllerTileEntityTierCreative.this.time[index] = value;
         }
 
         @Override
         public int getCount() { return 9; }
     };
+    private final List<String> blacklist = (List<String>) CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get();
+    private final int multiplier = CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get();
 
     public CentrifugeControllerTileEntityTierCreative(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
@@ -127,13 +78,9 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     @Override
     public void tick() {
         if (level != null && !level.isClientSide()) {
-            if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) {
-                checkHoneycombSlots();
-            }
+            if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) checkHoneycombSlots();
             validateTime++;
-            if (validateTime >= 0) {
-                validateStructure(this.level);
-            }
+            if (validateTime >= 0) validateStructure(this.level);
             if (dirty) {
                 this.dirty = false;
                 this.setChanged();
@@ -145,89 +92,49 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     protected void completeProcess(int i) {
         if (recipes.get(i) == null) {
             resetProcess(i);
-            return;
-        }
-        if (!inventoryHasSpace(recipes.get(i))) {
-            return;
-        }
-        if (!tanksHasSpace(recipes.get(i))) {
-            return;
-        }
-        Item CentrifugeInput = this.itemStackHandler.getStackInSlot(this.honeycombSlots[i]).getItem();
-        consumeInput(i);
-        ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
-        List<ItemStack> depositStacks = new ArrayList<>();
-        if (level == null) {
+        } else if(inventoryHasSpace(recipes.get(i)) && tanksHasSpace(recipes.get(i))){
+            ItemStack centrifugeInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
+            consumeInput(i);
+            ItemStack glassBottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
+            List<ItemStack> depositStacks = new ArrayList<>();
+            if (level != null) {
+                CentrifugeRecipe recipe = recipes.get(i);
+                for (int j = 0; j < recipe.itemOutputs.size(); j++) {
+                    float chance = recipe.itemOutputs.get(j).getRight();
+                    if (chance >= level.random.nextFloat()) {
+                        ItemStack output = recipe.itemOutputs.get(j).getLeft().copy();
+                        output.setCount(output.getCount() * (blacklist.contains(centrifugeInput.getItem().getRegistryName().toString()) ? 1 : multiplier));
+                        depositStacks.add(output);
+                        if (j == 2 && !recipe.noBottleInput) {
+                            glassBottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount() * multiplier);
+                        }
+                    }
+                }
+
+                for (Pair<FluidStack, Float> fluidStackFloatPair : recipe.fluidOutput) {
+                    float chance = fluidStackFloatPair.getRight();
+                    if (chance >= this.level.random.nextFloat()) {
+                        FluidStack fluid = fluidStackFloatPair.getLeft().copy();
+                        int tank = this.getValidTank(fluid);
+                        if(fluid.getAmount() != 0) fluid.setAmount(fluid.getAmount() * (blacklist.contains(centrifugeInput.getItem().getRegistryName().toString()) ? 1 : multiplier));
+                        if (tank != -1) {
+                            this.fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
+                        }
+                    }
+                }
+                if (!depositStacks.isEmpty()) {
+                    depositItemStacks(depositStacks);
+                }
+            }
             resetProcess(i);
-            return;
         }
-        CentrifugeRecipe recipe = recipes.get(i);
-
-        for (int j = 0; j < recipe.itemOutputs.size(); j++) {
-            float chance = recipe.itemOutputs.get(j).getRight();
-            if (chance >= level.random.nextFloat()) {
-
-                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
-                    if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
-                        depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
-                        break;
-                    }
-                    else
-                    {
-                        for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                            depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
-                        }
-                    }
-                }
-                if (j == 2 && !recipe.noBottleInput) {
-                    for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
-                        if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
-                            glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
-                            break;
-                        }
-                        else
-                        {
-                            for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                                glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for (Pair<FluidStack, Float> fluidOutput : recipe.fluidOutput) {
-            float chance = fluidOutput.getRight();
-            if (chance >= level.random.nextFloat()) {
-                FluidStack fluid = fluidOutput.getLeft().copy();
-                int tank = getValidTank(fluid);
-                for (String centrifugeInput : CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get()) {
-                    if (centrifugeInput.equalsIgnoreCase(CentrifugeInput.getRegistryName().toString())) {
-                        if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
-                        break;
-                    }
-                    else
-                    {
-                        for(int x = 0; x < CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_MUTLIPLIER.get(); x++) {
-                            if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
-                        }
-                    }
-                }
-            }
-        }
-        if (!depositStacks.isEmpty()) {
-            depositItemStacks(depositStacks);
-        }
-        resetProcess(i);
     }
-    
 
     private boolean tanksHasSpace(CentrifugeRecipe centrifugeRecipe) {
         if (centrifugeRecipe == null) return false;
         for (Pair<FluidStack, Float> f : centrifugeRecipe.fluidOutput) {
             if (f.getLeft().isEmpty()) continue;
-            if (getValidTank(f.getKey()) < 0) {
-                return false;
-            }
+            return getValidTank(f.getKey()) >= 0;
         }
         return true;
     }
@@ -235,11 +142,7 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     private int getValidTank(FluidStack fluid) {
         for (int i = 0; i < fluidTanks.getTanks(); i++) {
             if (fluidTanks.getFluidInTank(i).getFluid() == fluid.getFluid() || fluidTanks.getFluidInTank(i).isEmpty()) {
-                if (fluidTanks.getFluidInTank(i).getAmount() + fluid.getAmount() <= fluidTanks.getTankCapacity(i)) {
-                    return i;
-                } else {
-                    return -1;
-                }
+                return (fluidTanks.getFluidInTank(i).getAmount() + fluid.getAmount() <= fluidTanks.getTankCapacity(i)) ? i : -1;
             }
         }
         return -1;
@@ -348,12 +251,10 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
 
     @Override
     protected MutableBoundingBox getBounds() {
-    	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
-    	{
+    	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get()){
             return buildStructureBounds(this.getBlockPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlockTierCreative.FACING));
     	}
-    	else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false)
-    	{
+    	else if (!CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get()){
             return buildStructureBounds(this.getBlockPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlockTierCreative.FACING));
     	}
 		return buildStructureBounds(this.getBlockPos(), 3, 3, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlockTierCreative.FACING));
@@ -363,19 +264,14 @@ public class CentrifugeControllerTileEntityTierCreative extends CentrifugeContro
     protected void validateStructure(World world) {
         validateTime = 0;
         buildStructureList(getBounds(), structureBlocks, blockPos -> true, this.getBlockPos());
-    	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
-    	{
+    	if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get()){
             validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), 26);
-    	}
-    	else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false)
-    	{
+    	} else if (!CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get()){
             validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), 35);
     	}
         world.setBlockAndUpdate(worldPosition, getBlockState().setValue(CentrifugeControllerBlockTierCreative.PROPERTY_VALID, validStructure));
 
-        if (validStructure) {
-            linkCasings(world);
-        }
+        if (validStructure) linkCasings(world);
     }
     
     @Override
