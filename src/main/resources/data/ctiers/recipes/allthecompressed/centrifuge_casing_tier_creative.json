@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRG",
+    "R@R",
+    "DRE"
+  ],
+  "key": {
+    "I": { "item": "allthecompressed:iron_block_4x" },
+    "G": { "item": "allthecompressed:gold_block_4x" },
+    "D": { "item": "allthecompressed:diamond_block_4x" },
+    "E": { "item": "allthecompressed:emerald_block_4x" },
+    "R": { "tag": "forge:dusts/redstone" },
+    "@": { "item": "ctiers:centrifuge_casing_tier_5" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_casing_tier_creative",
+    "count": 1
+  },
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:not",
+          "value": {
+              "type": "forge:mod_loaded",
+              "modid": "compressium"
+          }
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "allthecompressed"
+        }
+      ]
+    }
+  ]
+}
