@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IBG",
+    "SCS",
+    "DRE"
+  ],
+  "key": {
+    "B": { "item": "ctiers:centrifuge_casing_tier_creative" },
+    "R": { "item": "minecraft:ender_pearl" },
+    "S": { "item": "minecraft:ender_eye" },
+    "I": { "item": "allthecompressed:iron_block_5x" },
+    "G": { "item": "allthecompressed:gold_block_5x" },
+    "D": { "item": "allthecompressed:diamond_block_5x" },
+    "E": { "item": "allthecompressed:emerald_block_5x" },
+    "C": { "item": "ctiers:centrifuge_controller_tier_5" }
+  },
+  "result": {
+    "item": "ctiers:centrifuge_controller_tier_creative"
+  },
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:not",
+          "value": {
+              "type": "forge:mod_loaded",
+              "modid": "compressium"
+          }
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "allthecompressed"
+        }
+      ]
+    }
+  ]
+}
