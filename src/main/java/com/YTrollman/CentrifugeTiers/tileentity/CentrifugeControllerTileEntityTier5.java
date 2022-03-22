@@ -46,7 +46,10 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
             if(getCount() - index >= 1) CentrifugeControllerTileEntityTier5.this.time[index] = value;
         }
 
-        public int getCount() { return 8; }
+        @Override
+        public int getCount() {
+            return 8;
+        }
     };
     private final List<String> blacklist = (List<String>) CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get();
     private final int multiplier = CentrifugeConfig.CENTRIFUGE_TIER_5_MUTLIPLIER.get();
@@ -81,7 +84,6 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
             resetProcess(i);
         } else if(inventoryHasSpace(recipes.get(i)) && tanksHasSpace(recipes.get(i))){
             ItemStack centrifugeInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-            consumeInput(i);
             ItemStack glassBottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
             List<ItemStack> depositStacks = new ArrayList<>();
             if (level != null) {
@@ -113,6 +115,7 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
                     depositItemStacks(depositStacks);
                 }
             }
+            consumeInput(i);
             resetProcess(i);
         }
     }
@@ -211,16 +214,22 @@ public class CentrifugeControllerTileEntityTier5 extends CentrifugeControllerTil
     public int getNumberOfInputs() { return 8; }
 
     @Override
-    public int getMaxTankCapacity() { return CentrifugeConfig.CENTRIFUGE_TIER_5_MAX_TANK_CAPACITY.get(); }
+    public int getMaxTankCapacity() {
+        return CentrifugeConfig.CENTRIFUGE_TIER_5_MAX_TANK_CAPACITY.get();
+    }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * CentrifugeConfig.CENTRIFUGE_TIER_5_RECIPE_TIME.get())) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) {
+    return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * CentrifugeConfig.CENTRIFUGE_TIER_5_RECIPE_TIME.get())) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
+    }
 
     @Override
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * CentrifugeConfig.CENTRIFUGE_TIER_5_RF_CAPACITY.get(), 8000, 0) {
             @Override
-            protected void onEnergyChanged() { setChanged(); }
+            protected void onEnergyChanged() {
+                setChanged();
+            }
         };
     }
 

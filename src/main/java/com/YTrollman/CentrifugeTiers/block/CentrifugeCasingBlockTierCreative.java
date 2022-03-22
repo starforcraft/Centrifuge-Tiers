@@ -14,7 +14,9 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class CentrifugeCasingBlockTierCreative extends CentrifugeCasingBlock {
-    public CentrifugeCasingBlockTierCreative(Properties properties) { super(properties); }
+    public CentrifugeCasingBlockTierCreative(Properties properties) {
+        super(properties);
+    }
 
     @Override
     public boolean hasTileEntity(BlockState state) {

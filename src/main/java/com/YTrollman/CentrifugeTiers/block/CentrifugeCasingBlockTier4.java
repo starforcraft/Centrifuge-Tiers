@@ -14,10 +14,14 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class CentrifugeCasingBlockTier4 extends CentrifugeCasingBlock {
-    public CentrifugeCasingBlockTier4(Properties properties) { super(properties); }
+    public CentrifugeCasingBlockTier4(Properties properties) {
+        super(properties);
+    }
 
     @Override
-    public boolean hasTileEntity(BlockState state) { return true; }
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
 
     @Nullable
     @Override

@@ -16,8 +16,7 @@ public class ClientEventHandler {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandler::doClientStuff);
     }
 
-    private static void doClientStuff(final FMLClientSetupEvent event) 
-    {
+    private static void doClientStuff(final FMLClientSetupEvent event) {
         ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_3.get(), CentrifugeMultiblockScreen::new);
         ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_4.get(), CentrifugeMultiblockScreenTier4::new);
         ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER_TIER_5.get(), CentrifugeMultiblockScreenTier5::new);

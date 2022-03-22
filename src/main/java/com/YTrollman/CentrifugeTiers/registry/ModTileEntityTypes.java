@@ -16,7 +16,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModTileEntityTypes {
-
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, CentrifugeTiers.MOD_ID);
 
     public static final RegistryObject<TileEntityType<?>> CENTRIFUGE_CONTROLLER_ENTITY_TIER_3 = TILE_ENTITY_TYPES.register("centrifuge_controller_tier_3", () -> TileEntityType.Builder

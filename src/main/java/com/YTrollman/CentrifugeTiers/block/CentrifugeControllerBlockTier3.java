@@ -30,7 +30,9 @@ public class CentrifugeControllerBlockTier3 extends CentrifugeControllerBlock {
 	private int number3 = CentrifugeConfig.CENTRIFUGE_TIER_3_MAX_TANK_CAPACITY.get();
 	private int number4 = CentrifugeConfig.CENTRIFUGE_TIER_3_RF_PER_BLOCK.get();
 	
-    public CentrifugeControllerBlockTier3(Properties properties) { super(properties); }
+    public CentrifugeControllerBlockTier3(Properties properties) {
+        super(properties);
+    }
     
     @Override
     public boolean hasTileEntity(BlockState state)
@@ -40,8 +42,7 @@ public class CentrifugeControllerBlockTier3 extends CentrifugeControllerBlock {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) 
-    { 
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
     	return new CentrifugeControllerTileEntityTier3(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY_TIER_3.get()); 
     }
     
@@ -56,8 +57,7 @@ public class CentrifugeControllerBlockTier3 extends CentrifugeControllerBlock {
                     .addTip(I18n.get("block.ctiers.centrifuge_tier_3.tooltip.MaxTankCapacity") + number3, TextFormatting.YELLOW)
                     .addTip(I18n.get("block.ctiers.centrifuge_tier_3.tooltip.rfperblock") + number4 + "x RF", TextFormatting.YELLOW)
                     .build());
-        }
-        else {
+        } else {
             tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.get("ctiers.left_shift_info")));
         }
         super.appendHoverText(stack, worldIn, tooltip, flagIn);

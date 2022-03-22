@@ -47,14 +47,16 @@ public class CentrifugeControllerTileEntityTier3 extends CentrifugeControllerTil
         }
 
         @Override
-        public int getCount() { return 6; }
+        public int getCount() {
+            return 6;
+        }
     };
     private final List<String> blacklist = (List<String>) CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get();
     private final int multiplier = CentrifugeConfig.CENTRIFUGE_TIER_3_MUTLIPLIER.get();
 
     public CentrifugeControllerTileEntityTier3(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
-    public void checkHoneycombSlots(){
+    public void checkHoneycombSlots() {
         for (int i = 0; i < honeycombSlots.length; i++) {
             recipes.set(i, getRecipe(i));
             if (canStartCentrifugeProcess(i)) isProcessing[i] = true;
@@ -82,7 +84,6 @@ public class CentrifugeControllerTileEntityTier3 extends CentrifugeControllerTil
             resetProcess(i);
         } else if(inventoryHasSpace(recipes.get(i)) && tanksHasSpace(recipes.get(i))){
             ItemStack centrifugeInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-            consumeInput(i);
             ItemStack glassBottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
             List<ItemStack> depositStacks = new ArrayList<>();
             if (level != null) {
@@ -110,6 +111,7 @@ public class CentrifugeControllerTileEntityTier3 extends CentrifugeControllerTil
                     depositItemStacks(depositStacks);
                 }
             }
+            consumeInput(i);
             resetProcess(i);
         }
     }
@@ -207,19 +209,27 @@ public class CentrifugeControllerTileEntityTier3 extends CentrifugeControllerTil
     }
     
     @Override
-    public int getNumberOfInputs() { return 6; }
+    public int getNumberOfInputs() {
+        return 6;
+    }
     
     @Override
-    public int getMaxTankCapacity() { return CentrifugeConfig.CENTRIFUGE_TIER_3_MAX_TANK_CAPACITY.get(); }
+    public int getMaxTankCapacity() {
+        return CentrifugeConfig.CENTRIFUGE_TIER_3_MAX_TANK_CAPACITY.get();
+    }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * CentrifugeConfig.CENTRIFUGE_TIER_3_RECIPE_TIME.get())) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) {
+        return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * CentrifugeConfig.CENTRIFUGE_TIER_3_RECIPE_TIME.get())) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
+    }
 
     @Override
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * CentrifugeConfig.CENTRIFUGE_TIER_3_RF_CAPACITY.get(), 2000, 0) {
             @Override
-            protected void onEnergyChanged() { setChanged(); }
+            protected void onEnergyChanged() {
+                setChanged();
+            }
         };
     }
 

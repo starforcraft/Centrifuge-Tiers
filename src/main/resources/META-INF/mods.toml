@@ -15,7 +15,7 @@ description="This mod adds tiers to the Centrifuge."
 [[dependencies.ctiers]]
     modId="resourcefulbees"
     mandatory=true
-    versionRange="[1.16.5-0.6.7b,)"
+    versionRange="[1.16.5-0.10.5,)"
     ordering="NONE"
     side="BOTH"
 

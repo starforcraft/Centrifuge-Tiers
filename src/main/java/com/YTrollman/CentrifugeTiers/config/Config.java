@@ -11,18 +11,15 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class Config {
-
 	private static final ForgeConfigSpec.Builder common_builder = new ForgeConfigSpec.Builder();
 	public static final ForgeConfigSpec common_config;
 	
-	static
-	{
+	static {
 		CentrifugeConfig.init(common_builder);
 		common_config = common_builder.build();
 	}
 	
-	public static void loadConfig(ForgeConfigSpec config, String path)
-	{
+	public static void loadConfig(ForgeConfigSpec config, String path) {
 		CentrifugeTiers.LOGGER.info("Loading config: " + path);
 		final CommentedFileConfig file = CommentedFileConfig.builder(new File(path)).sync().autosave().writingMode(WritingMode.REPLACE).build();
 		CentrifugeTiers.LOGGER.info("Built config: " + path);

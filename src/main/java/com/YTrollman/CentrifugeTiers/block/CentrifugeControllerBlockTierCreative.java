@@ -130,31 +130,27 @@ public class CentrifugeControllerBlockTierCreative extends Block {
                 .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
                 .build());
         if (Screen.hasControlDown()){
-    		if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true)
-    		{
+    		if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == true) {
                 tooltip.addAll(new TooltipBuilder()
                         .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.structure_size"), TextFormatting.AQUA)
                         .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.requisites"), TextFormatting.AQUA)
                         .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.capabilities"), TextFormatting.AQUA)
                         .build());	
-    		}
-    		else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false) {
+    		} else if (CentrifugeConfig.CENTRIFUGE_TIER_CREATIVE_SIZE.get() == false) {
                 tooltip.addAll(new TooltipBuilder()
                         .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.structure_size"), TextFormatting.AQUA)
                         .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.requisites"), TextFormatting.AQUA)
                         .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.capabilities"), TextFormatting.AQUA)
                         .build());	
     		}
-        }
-        else if (Screen.hasShiftDown()){
+        } else if (Screen.hasShiftDown()){
             tooltip.addAll(new TooltipBuilder()
                     .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.faster") + number + I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.faster2"), TextFormatting.YELLOW)
                     .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.multi") + number2, TextFormatting.YELLOW)
                     .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.ItemMaxStackSize") + number3, TextFormatting.YELLOW)
                     .addTip(I18n.get("block.ctiers.centrifuge_tier_creative.tooltip.MaxTankCapacity") + number4, TextFormatting.YELLOW)
                     .build());
-        }
-        else {
+        } else {
             tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.get("ctiers.left_shift_info")));
             tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.get("resourcefulbees.ctrl_info")));
         }

@@ -29,7 +29,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class CentrifugeMultiblockContainerTier5 extends Container {
-
     protected final CentrifugeControllerTileEntityTier5 centrifugeTileEntity;
     private final PlayerInventory inv;
     private final IntArray times;
@@ -159,11 +158,6 @@ public class CentrifugeMultiblockContainerTier5 extends Container {
         return centrifugeTileEntity.getRequiresRedstone();
     }
 
-    /**
-     * Determines whether supplied player can use this container
-     *
-     * @param player the player
-     */
     @Override
     public boolean stillValid(@Nonnull PlayerEntity player) { return true; }
 

@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import com.YTrollman.CentrifugeTiers.registry.ModItems;
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTierCreative;

@@ -1,17 +1,5 @@
 package com.YTrollman.CentrifugeTiers.tileentity;
 
-import static net.minecraft.inventory.container.Container.consideredTheSameItem;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.item.Item;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.YTrollman.CentrifugeTiers.block.CentrifugeCasingBlockTier4;
 import com.YTrollman.CentrifugeTiers.config.CentrifugeConfig;
 import com.YTrollman.CentrifugeTiers.container.CentrifugeMultiblockContainerTier4;
@@ -20,7 +8,6 @@ import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -32,6 +19,15 @@ import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+import static net.minecraft.inventory.container.Container.consideredTheSameItem;
 
 public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTileEntity {
 	public int ItemMaxStackSize = CentrifugeConfig.CENTRIFUGE_TIER_4_ITEM_MAX_STACK_SIZE.get();
@@ -48,7 +44,9 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
         }
 
         @Override
-        public int getCount() { return 7; }
+        public int getCount() {
+            return 7;
+        }
     };
     private final List<String> blacklist = (List<String>) CentrifugeConfig.CENTRIFUGE_MULTIPLIER_BLACKLIST.get();
     private final int multiplier = CentrifugeConfig.CENTRIFUGE_TIER_4_MUTLIPLIER.get();
@@ -58,15 +56,9 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
     public void checkHoneycombSlots(){
         for (int i = 0; i < honeycombSlots.length; i++) {
             recipes.set(i, getRecipe(i));
-            if (canStartCentrifugeProcess(i)) {
-                isProcessing[i] = true;
-            }
-            if (isProcessing[i] && !processCompleted[i]) {
-                processRecipe(i);
-            }
-            if (processCompleted[i]) {
-            	completeProcess(i);	
-            }
+            if (canStartCentrifugeProcess(i)) isProcessing[i] = true;
+            if (isProcessing[i] && !processCompleted[i]) processRecipe(i);
+            if (processCompleted[i]) completeProcess(i);
         }
     }
     
@@ -89,7 +81,6 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
             resetProcess(i);
         } else if(inventoryHasSpace(recipes.get(i)) && tanksHasSpace(recipes.get(i))){
             ItemStack centrifugeInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-            consumeInput(i);
             ItemStack glassBottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
             List<ItemStack> depositStacks = new ArrayList<>();
             if (level != null) {
@@ -121,6 +112,7 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
                     depositItemStacks(depositStacks);
                 }
             }
+            consumeInput(i);
             resetProcess(i);
         }
     }
@@ -218,19 +210,27 @@ public class CentrifugeControllerTileEntityTier4 extends CentrifugeControllerTil
     }
     
     @Override
-    public int getNumberOfInputs() { return 7; }
+    public int getNumberOfInputs() {
+        return 7;
+    }
     
     @Override
-    public int getMaxTankCapacity() { return CentrifugeConfig.CENTRIFUGE_TIER_4_MAX_TANK_CAPACITY.get(); }
+    public int getMaxTankCapacity() {
+        return CentrifugeConfig.CENTRIFUGE_TIER_4_MAX_TANK_CAPACITY.get();
+    }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * CentrifugeConfig.CENTRIFUGE_TIER_4_RECIPE_TIME.get())) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) {
+        return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * CentrifugeConfig.CENTRIFUGE_TIER_4_RECIPE_TIME.get())) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
+    }
 
     @Override
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * CentrifugeConfig.CENTRIFUGE_TIER_4_RF_CAPACITY.get(), 4000, 0) {
             @Override
-            protected void onEnergyChanged() { setChanged(); }
+            protected void onEnergyChanged() {
+                setChanged();
+            }
         };
     }
 

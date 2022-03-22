@@ -42,7 +42,9 @@ public class CentrifugeControllerBlockTier5 extends CentrifugeControllerBlock {
 	private int number3 = CentrifugeConfig.CENTRIFUGE_TIER_5_MAX_TANK_CAPACITY.get();
 	private int number4 = CentrifugeConfig.CENTRIFUGE_TIER_5_RF_PER_BLOCK.get();
 	
-    public CentrifugeControllerBlockTier5(Properties properties) { super(properties); }
+    public CentrifugeControllerBlockTier5(Properties properties) {
+        super(properties);
+    }
 
     @Override
     protected CentrifugeControllerTileEntityTier5 getControllerEntity(World world, BlockPos pos) {
@@ -61,8 +63,7 @@ public class CentrifugeControllerBlockTier5 extends CentrifugeControllerBlock {
     
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) 
-    { 
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
     	return new CentrifugeControllerTileEntityTier5(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY_TIER_5.get()); 
     }
     
@@ -77,8 +78,7 @@ public class CentrifugeControllerBlockTier5 extends CentrifugeControllerBlock {
                     .addTip(I18n.get("block.ctiers.centrifuge_tier_5.tooltip.MaxTankCapacity") + number3, TextFormatting.YELLOW)
                     .addTip(I18n.get("block.ctiers.centrifuge_tier_5.tooltip.rfperblock") + number4 + "x RF", TextFormatting.YELLOW)
                     .build());
-        }
-        else {
+        } else {
             tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.get("ctiers.left_shift_info")));
         }
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
@@ -99,9 +99,7 @@ public class CentrifugeControllerBlockTier5 extends CentrifugeControllerBlock {
                 } else if (!player.isShiftKeyDown()) {
                     NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
                 }
-            }
-            else
-            {
+            } else {
                 return ActionResultType.PASS;
             }
         }
